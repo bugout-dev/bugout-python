@@ -4,7 +4,7 @@ Bugout Python API
 __author__ = "Bugout"
 __maintainer__ = __author__
 
-__email__ = "neeraj@bugout.dev"
+__email__ = "engineering@bugout.dev"
 __license__ = "MIT"
 __version__ = "0.0.1"
 
