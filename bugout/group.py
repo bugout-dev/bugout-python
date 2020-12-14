@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional, Tuple
 
-from .calls import make_request
+from .calls import make_request, InvalidUrlSpec
 from .data import BugoutGroup, Method
 
 logger = logging.getLogger(__name__)
@@ -18,7 +18,9 @@ class Group:
     Represent a group from Bugout.
     """
 
-    def __init__(self, url) -> None:
+    def __init__(self, url: Optional[str] = None) -> None:
+        if url is None:
+            raise InvalidUrlSpec("Invalid brood url specified")
         self.url = url
 
     def _call(self, method: Method, path: str, **kwargs):

@@ -8,9 +8,17 @@ from pydantic import BaseModel
 
 @unique
 class Method(Enum):
+    delete = "delete"
     get = "get"
     post = "post"
-    delete = "delete"
+    put = "put"
+
+
+@unique
+class TokenType(Enum):
+    bugout = "bugout"
+    slack = "slack"
+    github = "github"
 
 
 class BugoutUser(BaseModel):
@@ -37,3 +45,9 @@ class BugoutJournal(BaseModel):
     name: str
     created_at: datetime
     updated_at: datetime
+
+
+class BugoutToken(BaseModel):
+    id: uuid.UUID
+    token_type: Optional[str]
+    token_note: Optional[str]

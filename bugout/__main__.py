@@ -29,12 +29,12 @@ def main() -> None:
 
     parser.add_argument(
         "--brood_url",
-        default="http://localhost:7474",
+        default="http://localhost",
         help="Brood url",
     )
     parser.add_argument(
         "--spire_url",
-        default="http://localhost:7475",
+        default="http://localhost",
         help="Spire url",
     )
 

@@ -8,6 +8,12 @@ from .data import Method
 logger = logging.getLogger(__name__)
 
 
+class InvalidUrlSpec(ValueError):
+    """
+    Raised when an invalid url is specified.
+    """
+
+
 class BugoutUnexpectedResponse(Exception):
     """
     Raised when Bugout server response is unexpected (e.g. unparseable).
