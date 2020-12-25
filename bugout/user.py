@@ -5,12 +5,6 @@ from .calls import make_request, InvalidUrlSpec
 from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
 
 
-class UserNotFound(Exception):
-    """
-    Raised on actions that involve user which are not present in the database.
-    """
-
-
 class TokenInvalidParameters(ValueError):
     """
     Raised when operations are applied to a token but invalid parameters are provided with which to
@@ -169,7 +163,6 @@ class User:
     ) -> BugoutToken:
         update_token_path = "token"
 
-        data: Dict[str, Any] = {"access_token": token}
         if token_type is None and token_note is None:
             raise TokenInvalidParameters(
                 "In order to update token, at least one of token_type, or token_note must be specified"
@@ -178,7 +171,7 @@ class User:
             raise TokenInvalidParameters(
                 "Incorrect token type provided, check types at get_token_types()"
             )
-
+        data: Dict[str, Any] = {"access_token": token}
         if token_type is not None:
             data.update({"token_type": token_type})
         if token_note is not None:

@@ -112,8 +112,46 @@ class Bugout:
         return self.user.get_user_tokens(token, active, token_type)
 
     # Group handlers
-    def get_group(self, group_id: uuid.UUID, token: uuid.UUID) -> data.BugoutGroup:
-        return self.group.get_group(group_id, token)
+    def get_group(self, token: uuid.UUID, group_id: uuid.UUID) -> data.BugoutGroup:
+        return self.group.get_group(token, group_id)
+
+    def get_user_groups(self, token: uuid.UUID) -> data.BugoutUserGroups:
+        return self.group.get_user_groups(token)
+
+    def create_group(self, token: uuid.UUID, group_name: str) -> data.BugoutGroup:
+        return self.group.create_group(token, group_name)
+
+    def set_user_group(
+        self,
+        token: uuid.UUID,
+        group_id: uuid.UUID,
+        user_type: data.Role,
+        username: Optional[str] = None,
+        email: Optional[str] = None,
+    ) -> data.BugoutGroupUser:
+        return self.group.set_user_group(token, group_id, user_type, username, email)
+
+    def delete_user_group(
+        self,
+        token: uuid.UUID,
+        group_id: uuid.UUID,
+        username: Optional[str] = None,
+        email: Optional[str] = None,
+    ) -> data.BugoutGroupUser:
+        return self.group.delete_user_group(token, group_id, username, email)
+
+    def get_group_members(
+        self, token: uuid.UUID, group_id: uuid.UUID
+    ) -> data.BugoutGroupMembers:
+        return self.group.get_group_members(token, group_id)
+
+    def update_group(
+        self, token: uuid.UUID, group_id: uuid.UUID, group_name: str
+    ) -> data.BugoutGroup:
+        return self.group.update_group(token, group_id, group_name)
+
+    def delete_group(self, token: uuid.UUID, group_id: uuid.UUID) -> data.BugoutGroup:
+        return self.group.delete_group(token, group_id)
 
     # Journal handlers
     def get_journal(
