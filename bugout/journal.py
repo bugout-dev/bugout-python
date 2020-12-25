@@ -1,5 +1,6 @@
 import logging
 from typing import Any, Dict, List, Optional, Tuple
+import uuid
 
 from .calls import make_request, InvalidUrlSpec
 from .data import BugoutJournal, Method
@@ -28,7 +29,7 @@ class Journal:
         result = make_request(method=method, url=url, **kwargs)
         return result
 
-    def get_journal(self, journal_id: str, token: str) -> BugoutJournal:
+    def get_journal(self, journal_id: uuid.UUID, token: uuid.UUID) -> BugoutJournal:
         get_group_path = f"journals/{journal_id}"
         headers = {
             "Authorization": f"Bearer {token}",

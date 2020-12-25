@@ -1,5 +1,6 @@
 import logging
 from typing import Any, Dict, List, Optional, Tuple
+import uuid
 
 from .calls import make_request, InvalidUrlSpec
 from .data import BugoutGroup, Method
@@ -28,7 +29,7 @@ class Group:
         result = make_request(method=method, url=url, **kwargs)
         return result
 
-    def get_group(self, group_id: str, token: str) -> BugoutGroup:
+    def get_group(self, group_id: uuid.UUID, token: uuid.UUID) -> BugoutGroup:
         get_group_path = f"groups/{group_id}"
         headers = {
             "Authorization": f"Bearer {token}",
