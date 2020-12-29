@@ -1,17 +1,8 @@
-import logging
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
 from .data import BugoutJournal, Method
-
-logger = logging.getLogger(__name__)
-
-
-class JournalNotFound(Exception):
-    """
-    Raised on actions that involve journal which are not present in the database.
-    """
 
 
 class Journal:

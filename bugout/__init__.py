@@ -6,7 +6,7 @@ __maintainer__ = __author__
 
 __email__ = "engineering@bugout.dev"
 __license__ = "MIT"
-__version__ = "0.0.1"
+__version__ = "0.0.5"
 
 __all__ = (
     "__author__",
