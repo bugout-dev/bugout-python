@@ -3,6 +3,7 @@ Bugout Python API
 """
 __author__ = "Bugout"
 __maintainer__ = __author__
+__description__ = "Python client library for Bugout API"
 
 __email__ = "engineering@bugout.dev"
 __license__ = "MIT"

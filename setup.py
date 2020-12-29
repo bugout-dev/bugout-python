@@ -29,7 +29,7 @@ setup(
     author=module.__author__,
     author_email=module.__email__,
     license=module.__license__,
-    description=module.__doc__,
+    description=module.__description__,
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/bugout-dev/bugout-python",
@@ -49,9 +49,5 @@ setup(
     packages=find_packages(),
     install_requires=load_requirements("requirements.txt"),
     extras_require={"dev": load_requirements("requirements.dev.txt")},
-    entry_points={
-        "console_scripts": [
-            "{0} = {0}.__main__:main".format(MODULE_NAME)
-        ]
-    },
+    entry_points={"console_scripts": ["{0} = {0}.__main__:main".format(MODULE_NAME)]},
 )
