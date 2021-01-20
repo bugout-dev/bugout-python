@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
-from .data import BugoutJournal, Method
+from .data import BugoutJournal, BugoutJournals, Method
 
 
 class Journal:
@@ -20,17 +20,55 @@ class Journal:
         result = make_request(method=method, url=url, **kwargs)
         return result
 
-    def get_journal(self, journal_id: uuid.UUID, token: uuid.UUID) -> BugoutJournal:
-        get_group_path = f"journals/{journal_id}"
+    # Journal module
+    def create_journal(self, token: uuid.UUID, name: str) -> BugoutJournal:
+        journal_path = "journals/"
+        json = {
+            "name": name,
+        }
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        result = self._call(method=Method.get, path=get_group_path, headers=headers)
-        return BugoutJournal(
-            id=result.get("id"),
-            bugout_user_id=result.get("bugout_user_id"),
-            holder_ids=result.get("holder_ids"),
-            name=result.get("name"),
-            created_at=result.get("created_at"),
-            updated_at=result.get("updated_at"),
+        result = self._call(
+            method=Method.post, path=journal_path, headers=headers, json=json
         )
+        return BugoutJournal(**result)
+
+    def list_journals(self, token: uuid.UUID) -> BugoutJournals:
+        journal_path = "journals/"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=journal_path, headers=headers)
+        return BugoutJournals(**result)
+
+    def get_journal(self, token: uuid.UUID, journal_id: uuid.UUID) -> BugoutJournal:
+        journal_id_path = f"journals/{journal_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=journal_id_path, headers=headers)
+        return BugoutJournal(**result)
+
+    def update_journal(
+        self, token: uuid.UUID, journal_id: uuid.UUID, name: str
+    ) -> BugoutJournal:
+        journal_id_path = f"journals/{journal_id}"
+        json = {
+            "name": name,
+        }
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.put, path=journal_id_path, headers=headers, json=json
+        )
+        return BugoutJournal(**result)
+
+    def delete_journal(self, token: uuid.UUID, journal_id: uuid.UUID) -> BugoutJournal:
+        journal_id_path = f"journals/{journal_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.delete, path=journal_id_path, headers=headers)
+        return BugoutJournal(**result)

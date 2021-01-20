@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum, unique
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 import uuid
 
 from pydantic import BaseModel, Field
@@ -88,7 +88,11 @@ class BugoutGroupMembers(BaseModel):
 class BugoutJournal(BaseModel):
     id: uuid.UUID
     bugout_user_id: uuid.UUID
-    holder_ids: List[uuid.UUID]
+    holder_ids: Set[uuid.UUID] = Field(default_factory=set)
     name: str
     created_at: datetime
     updated_at: datetime
+
+
+class BugoutJournals(BaseModel):
+    journals: List[BugoutJournal]

@@ -153,8 +153,58 @@ class Bugout:
     def delete_group(self, token: uuid.UUID, group_id: uuid.UUID) -> data.BugoutGroup:
         return self.group.delete_group(token, group_id)
 
+    # Journal scopes handlers
+    def get_scopes(self):
+        pass
+
+    def get_journal_scopes(self):
+        pass
+
+    def update_journal_scopes(self):
+        pass
+
+    def delete_journal_scopes(self):
+        pass
+
     # Journal handlers
+    def create_journal(self, token: uuid.UUID, name: str) -> data.BugoutJournal:
+        return self.journal.create_journal(token, name)
+
+    def list_journals(self, token: uuid.UUID) -> data.BugoutJournals:
+        return self.journal.list_journals(token)
+
     def get_journal(
-        self, journal_id: uuid.UUID, token: uuid.UUID
+        self, token: uuid.UUID, journal_id: uuid.UUID
     ) -> data.BugoutJournal:
-        return self.journal.get_journal(journal_id, token)
+        return self.journal.get_journal(token, journal_id)
+
+    def update_journal(
+        self, token: uuid.UUID, journal_id: uuid.UUID, name: str
+    ) -> data.BugoutJournal:
+        return self.journal.update_journal(token, journal_id, name)
+
+    def delete_journal(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournal:
+        return self.journal.delete_journal(token, journal_id)
+
+    # Journal entries
+    def create_entry(self):
+        pass
+
+    def get_entry(self):
+        pass
+
+    def get_entries(self):
+        pass
+
+    def get_entry_content(self):
+        pass
+
+    def update_entry_content(self):
+        pass
+
+    def delete_entry(self):
+        pass
+
+    # Tags
