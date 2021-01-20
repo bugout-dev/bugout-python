@@ -2,7 +2,15 @@ from typing import Any, Dict, List, Optional
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
-from .data import BugoutJournal, BugoutJournals, Method
+from .data import (
+    BugoutJournal,
+    BugoutJournals,
+    BugoutScope,
+    BugoutScopes,
+    BugoutJournalScopeSpecs,
+    HolderType,
+    Method,
+)
 
 
 class Journal:
@@ -72,3 +80,74 @@ class Journal:
         }
         result = self._call(method=Method.delete, path=journal_id_path, headers=headers)
         return BugoutJournal(**result)
+
+    # Scope module
+    def list_scopes(self, token: uuid.UUID, api: str) -> BugoutScopes:
+        scopes_path = f"journals/scopes"
+        json = {
+            "api": api,
+        }
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.get, path=scopes_path, headers=headers, json=json
+        )
+        print(result)
+        return BugoutScopes(**result)
+
+    def get_journal_scopes(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> BugoutJournalScopeSpecs:
+        journal_scopes_path = f"journals/{journal_id}/scopes"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.get, path=journal_scopes_path, headers=headers
+        )
+        return BugoutJournalScopeSpecs(**result)
+
+    def update_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> BugoutJournalScopeSpecs:
+        journal_scopes_path = f"journals/{journal_id}/scopes"
+        json = {
+            "holder_type": holder_type,
+            "holder_id": holder_id,
+            "permission_list": permission_list,
+        }
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.post, path=journal_scopes_path, headers=headers, json=json
+        )
+        return BugoutJournalScopeSpecs(**result)
+
+    def delete_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> BugoutJournalScopeSpecs:
+        journal_scopes_path = f"journals/{journal_id}/scopes"
+        json = {
+            "holder_type": holder_type,
+            "holder_id": holder_id,
+            "permission_list": permission_list,
+        }
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.delete, path=journal_scopes_path, headers=headers, json=json
+        )
+        return BugoutJournalScopeSpecs(**result)

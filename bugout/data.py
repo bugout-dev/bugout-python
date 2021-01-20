@@ -27,6 +27,12 @@ class TokenType(Enum):
     github = "github"
 
 
+@unique
+class HolderType(Enum):
+    user = "user"
+    group = "group"
+
+
 class BugoutUser(BaseModel):
     id: uuid.UUID = Field(alias="user_id")
     username: str
@@ -83,6 +89,27 @@ class BugoutGroupMembers(BaseModel):
     id: uuid.UUID
     name: str
     users: List[BugoutUserShort]
+
+
+class BugoutScope(BaseModel):
+    api: str
+    scope: str
+    description: str
+
+
+class BugoutScopes(BaseModel):
+    scopes: List[BugoutScope]
+
+
+class BugoutJournalScopeSpec(BaseModel):
+    journal_id: uuid.UUID
+    holder_type: HolderType
+    holder_id: str
+    permission: str
+
+
+class BugoutJournalScopeSpecs(BaseModel):
+    scopes: List[BugoutJournalScopeSpec]
 
 
 class BugoutJournal(BaseModel):

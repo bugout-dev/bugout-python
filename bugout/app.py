@@ -154,17 +154,37 @@ class Bugout:
         return self.group.delete_group(token, group_id)
 
     # Journal scopes handlers
-    def get_scopes(self):
-        pass
+    def list_scopes(self, token: uuid.UUID, api: str) -> data.BugoutScopes:
+        return self.journal.list_scopes(token, api)
 
-    def get_journal_scopes(self):
-        pass
+    def get_journal_scopes(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.get_journal_scopes(token, journal_id)
 
-    def update_journal_scopes(self):
-        pass
+    def update_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: data.HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.update_journal_scopes(
+            token, journal_id, holder_type, holder_id, permission_list
+        )
 
-    def delete_journal_scopes(self):
-        pass
+    def delete_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: data.HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.delete_journal_scopes(
+            token, journal_id, holder_type, holder_id, permission_list
+        )
 
     # Journal handlers
     def create_journal(self, token: uuid.UUID, name: str) -> data.BugoutJournal:
