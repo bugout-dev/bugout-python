@@ -47,6 +47,8 @@ setup(
     ],
     python_requires=">=3.8",
     packages=find_packages(),
+    package_data={"bugout": ["py.typed"]},
+    zip_safe=False,
     install_requires=load_requirements("requirements.txt"),
     extras_require={"dev": load_requirements("requirements.dev.txt")},
     entry_points={"console_scripts": ["{0} = {0}.__main__:main".format(MODULE_NAME)]},
