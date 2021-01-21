@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional, Union
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
@@ -33,7 +33,9 @@ class Group:
         result = make_request(method=method, url=url, **kwargs)
         return result
 
-    def get_group(self, token: uuid.UUID, group_id: uuid.UUID) -> BugoutGroup:
+    def get_group(
+        self, token: Union[str, uuid.UUID], group_id: Union[str, uuid.UUID]
+    ) -> BugoutGroup:
         get_group_path = f"group/{group_id}"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -41,7 +43,7 @@ class Group:
         result = self._call(method=Method.get, path=get_group_path, headers=headers)
         return BugoutGroup(**result)
 
-    def get_user_groups(self, token: uuid.UUID) -> BugoutUserGroups:
+    def get_user_groups(self, token: Union[str, uuid.UUID]) -> BugoutUserGroups:
         get_user_groups_path = "groups"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -51,7 +53,9 @@ class Group:
         )
         return BugoutUserGroups(**result)
 
-    def create_group(self, token: uuid.UUID, group_name: str) -> BugoutGroup:
+    def create_group(
+        self, token: Union[str, uuid.UUID], group_name: str
+    ) -> BugoutGroup:
         create_group_path = "group"
         data = {
             "group_name": group_name,
@@ -66,8 +70,8 @@ class Group:
 
     def set_user_group(
         self,
-        token: uuid.UUID,
-        group_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        group_id: Union[str, uuid.UUID],
         user_type: Role,
         username: Optional[str] = None,
         email: Optional[str] = None,
@@ -96,8 +100,8 @@ class Group:
 
     def delete_user_group(
         self,
-        token: uuid.UUID,
-        group_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        group_id: Union[str, uuid.UUID],
         username: Optional[str] = None,
         email: Optional[str] = None,
     ) -> BugoutGroupUser:
@@ -128,7 +132,7 @@ class Group:
         return BugoutGroupUser(**result)
 
     def get_group_members(
-        self, token: uuid.UUID, group_id: uuid.UUID
+        self, token: Union[str, uuid.UUID], group_id: Union[str, uuid.UUID]
     ) -> BugoutGroupMembers:
         get_group_members_path = f"group/{group_id}/users"
         headers = {
@@ -140,7 +144,10 @@ class Group:
         return BugoutGroupMembers(**result)
 
     def update_group(
-        self, token: uuid.UUID, group_id: uuid.UUID, group_name: str
+        self,
+        token: Union[str, uuid.UUID],
+        group_id: Union[str, uuid.UUID],
+        group_name: str,
     ) -> BugoutGroup:
         update_group_path = f"group/{group_id}/name"
         data = {
@@ -154,7 +161,9 @@ class Group:
         )
         return BugoutGroup(**result)
 
-    def delete_group(self, token: uuid.UUID, group_id: uuid.UUID) -> BugoutGroup:
+    def delete_group(
+        self, token: Union[str, uuid.UUID], group_id: Union[str, uuid.UUID]
+    ) -> BugoutGroup:
         delete_group_path = f"group/{group_id}"
         headers = {
             "Authorization": f"Bearer {token}",

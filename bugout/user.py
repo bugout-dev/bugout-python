@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
@@ -51,7 +51,7 @@ class User:
         )
         return BugoutUser(**result)
 
-    def get_user(self, token: uuid.UUID) -> BugoutUser:
+    def get_user(self, token: Union[str, uuid.UUID]) -> BugoutUser:
         get_user_path = "user"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -59,7 +59,9 @@ class User:
         result = self._call(method=Method.get, path=get_user_path, headers=headers)
         return BugoutUser(**result)
 
-    def get_user_by_id(self, token: uuid.UUID, user_id: uuid.UUID) -> BugoutUser:
+    def get_user_by_id(
+        self, token: Union[str, uuid.UUID], user_id: Union[str, uuid.UUID]
+    ) -> BugoutUser:
         get_user_by_id_path = f"user/{user_id}"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -69,7 +71,9 @@ class User:
         )
         return BugoutUser(**result)
 
-    def confirm_email(self, token: uuid.UUID, verification_code: str) -> BugoutUser:
+    def confirm_email(
+        self, token: Union[str, uuid.UUID], verification_code: str
+    ) -> BugoutUser:
         confirm_user_email_path = "confirm"
         data = {
             "verification_code": verification_code,
@@ -90,7 +94,9 @@ class User:
         result = self._call(method=Method.post, path=restore_password_path, data=data)
         return result
 
-    def reset_password(self, reset_id: uuid.UUID, new_password: str) -> BugoutUser:
+    def reset_password(
+        self, reset_id: Union[str, uuid.UUID], new_password: str
+    ) -> BugoutUser:
         reset_password_path = "password/reset"
         data = {
             "reset_id": reset_id,
@@ -100,7 +106,7 @@ class User:
         return BugoutUser(**result)
 
     def change_password(
-        self, token: uuid.UUID, current_password: str, new_password: str
+        self, token: Union[str, uuid.UUID], current_password: str, new_password: str
     ) -> BugoutUser:
         change_password_path = "password/change"
         data = {
@@ -116,7 +122,10 @@ class User:
         return BugoutUser(**result)
 
     def delete_user(
-        self, token: uuid.UUID, user_id: uuid.UUID, password: str
+        self,
+        token: Union[str, uuid.UUID],
+        user_id: Union[str, uuid.UUID],
+        password: str,
     ) -> BugoutUser:
         delete_user_path = f"user/{user_id}"
         data = {
@@ -140,7 +149,7 @@ class User:
         result = self._call(method=Method.post, path=create_token_path, data=data)
         return BugoutToken(**result)
 
-    def revoke_token(self, token: uuid.UUID) -> uuid.UUID:
+    def revoke_token(self, token: Union[str, uuid.UUID]) -> uuid.UUID:
         revoke_token_path = "token"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -150,14 +159,14 @@ class User:
         )
         return result
 
-    def revoke_token_by_id(self, token: uuid.UUID) -> uuid.UUID:
+    def revoke_token_by_id(self, token: Union[str, uuid.UUID]) -> uuid.UUID:
         revoke_token_path = f"token/{token}"
         result = self._call(method=Method.delete, path=revoke_token_path)
         return result
 
     def update_token(
         self,
-        token: uuid.UUID,
+        token: Union[str, uuid.UUID],
         token_type: Optional[TokenType] = None,
         token_note: Optional[str] = None,
     ) -> BugoutToken:
@@ -180,7 +189,7 @@ class User:
         result = self._call(method=Method.put, path=update_token_path, data=data)
         return BugoutToken(**result)
 
-    def get_token_types(self, token: uuid.UUID) -> List[str]:
+    def get_token_types(self, token: Union[str, uuid.UUID]) -> List[str]:
         get_token_types_path = "token/types"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -192,7 +201,7 @@ class User:
 
     def get_user_tokens(
         self,
-        token: uuid.UUID,
+        token: Union[str, uuid.UUID],
         active: Optional[bool] = None,
         token_type: Optional[TokenType] = None,
     ) -> BugoutUserTokens:
