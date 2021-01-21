@@ -209,14 +209,37 @@ class Bugout:
         return self.journal.delete_journal(token, journal_id)
 
     # Journal entries
-    def create_entry(self):
-        pass
+    def create_entry(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        title: str,
+        content: str,
+        tags: List[str] = [],
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
+    ) -> data.BugoutJournalEntry:
+        return self.journal.create_entry(
+            token,
+            journal_id,
+            title,
+            content,
+            tags,
+            context_url,
+            context_id,
+            context_type,
+        )
 
-    def get_entry(self):
-        pass
+    def get_entry(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntry:
+        return self.journal.get_entry(token, journal_id, entry_id)
 
-    def get_entries(self):
-        pass
+    def get_entries(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournalEntries:
+        return self.journal.get_entries(token, journal_id)
 
     def get_entry_content(self):
         pass
