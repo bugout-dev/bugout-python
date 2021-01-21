@@ -5,11 +5,12 @@ from .calls import make_request, InvalidUrlSpec
 from .data import (
     BugoutJournal,
     BugoutJournals,
-    BugoutScope,
     BugoutScopes,
     BugoutJournalScopeSpecs,
     BugoutJournalEntry,
     BugoutJournalEntries,
+    BugoutJournalEntryContent,
+    BugoutJournalEntryTags,
     HolderType,
     Method,
 )
@@ -166,7 +167,7 @@ class Journal:
         context_id: Optional[str] = None,
         context_type: Optional[str] = None,
     ) -> BugoutJournalEntry:
-        journal_entry_path = f"journals/{journal_id}/entries"
+        entry_path = f"journals/{journal_id}/entries"
         json = {
             "title": title,
             "content": content,
@@ -179,28 +180,145 @@ class Journal:
             "Authorization": f"Bearer {token}",
         }
         result = self._call(
-            method=Method.post, path=journal_entry_path, headers=headers, json=json
+            method=Method.post, path=entry_path, headers=headers, json=json
         )
         return BugoutJournalEntry(**result)
 
     def get_entry(
         self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
     ) -> BugoutJournalEntry:
-        journal_entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
+        entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        result = self._call(
-            method=Method.get, path=journal_entry_id_path, headers=headers
-        )
+        result = self._call(method=Method.get, path=entry_id_path, headers=headers)
         return BugoutJournalEntry(**result)
 
     def get_entries(
         self, token: uuid.UUID, journal_id: uuid.UUID
     ) -> BugoutJournalEntries:
-        journal_entry_path = f"journals/{journal_id}/entries"
+        entry_path = f"journals/{journal_id}/entries"
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        result = self._call(method=Method.get, path=journal_entry_path, headers=headers)
+        result = self._call(method=Method.get, path=entry_path, headers=headers)
         return BugoutJournalEntries(**result)
+
+    def get_entry_content(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> BugoutJournalEntryContent:
+        entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.get, path=entry_id_content_path, headers=headers
+        )
+        return BugoutJournalEntryContent(**result)
+
+    def update_entry_content(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        title: str,
+        content: str,
+    ) -> BugoutJournalEntryContent:
+        entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
+        json = {
+            "title": title,
+            "content": content,
+        }
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.put,
+            path=entry_id_content_path,
+            headers=headers,
+            json=json,
+        )
+        return BugoutJournalEntryContent(**result)
+
+    def delete_entry(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+    ) -> BugoutJournalEntry:
+        entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.delete, path=entry_id_path, headers=headers)
+        return BugoutJournalEntry(**result)
+
+    # Tags modules
+    def get_most_used_tags(self, token: uuid.UUID, journal_id: uuid.UUID) -> List[Any]:
+        tags_path = f"journals/{journal_id}/tags"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=tags_path, headers=headers)
+        return result
+
+    def create_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
+        json = {"tags": tags}
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.post, path=tags_path, headers=headers, json=json
+        )
+        return result
+
+    def get_tags(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> BugoutJournalEntryTags:
+        tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=tags_path, headers=headers)
+        return BugoutJournalEntryTags(**result)
+
+    def update_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
+        json = {"tags": tags}
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.put, path=tags_path, headers=headers, json=json
+        )
+        return result
+
+    def delete_tag(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tag: str,
+    ) -> BugoutJournalEntryTags:
+        tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
+        json = {"tag": tag}
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.delete, path=tags_path, headers=headers, json=json
+        )
+        return BugoutJournalEntryTags(**result)

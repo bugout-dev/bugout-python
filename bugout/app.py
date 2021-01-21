@@ -241,13 +241,63 @@ class Bugout:
     ) -> data.BugoutJournalEntries:
         return self.journal.get_entries(token, journal_id)
 
-    def get_entry_content(self):
-        pass
+    def get_entry_content(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntryContent:
+        return self.journal.get_entry_content(token, journal_id, entry_id)
 
-    def update_entry_content(self):
-        pass
+    def update_entry_content(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        title: str,
+        content: str,
+    ) -> data.BugoutJournalEntryContent:
+        return self.journal.update_entry_content(
+            token, journal_id, entry_id, title, content
+        )
 
-    def delete_entry(self):
-        pass
+    def delete_entry(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+    ) -> data.BugoutJournalEntry:
+        return self.journal.delete_entry(token, journal_id, entry_id)
 
     # Tags
+    def get_most_used_tags(self, token: uuid.UUID, journal_id: uuid.UUID) -> List[Any]:
+        return self.journal.get_most_used_tags(token, journal_id)
+
+    def create_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        return self.journal.create_tags(token, journal_id, entry_id, tags)
+
+    def get_tags(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntryTags:
+        return self.journal.get_tags(token, journal_id, entry_id)
+
+    def update_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        return self.journal.update_tags(token, journal_id, entry_id, tags)
+
+    def delete_tag(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tag: str,
+    ) -> data.BugoutJournalEntryTags:
+        return self.journal.delete_tag(token, journal_id, entry_id, tag)

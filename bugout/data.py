@@ -140,3 +140,14 @@ class BugoutJournalEntry(BaseModel):
 
 class BugoutJournalEntries(BaseModel):
     entries: List[BugoutJournalEntry]
+
+
+class BugoutJournalEntryContent(BaseModel):
+    title: str
+    content: str
+
+
+class BugoutJournalEntryTags(BaseModel):
+    journal_id: uuid.UUID
+    entry_id: uuid.UUID
+    tags: List[str]
