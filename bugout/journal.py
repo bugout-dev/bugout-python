@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
@@ -34,7 +34,7 @@ class Journal:
         return result
 
     # Scope module
-    def list_scopes(self, token: uuid.UUID, api: str) -> BugoutScopes:
+    def list_scopes(self, token: Union[str, uuid.UUID], api: str) -> BugoutScopes:
         scopes_path = f"journals/scopes"
         json = {
             "api": api,
@@ -45,11 +45,10 @@ class Journal:
         result = self._call(
             method=Method.get, path=scopes_path, headers=headers, json=json
         )
-        print(result)
         return BugoutScopes(**result)
 
     def get_journal_scopes(
-        self, token: uuid.UUID, journal_id: uuid.UUID
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
     ) -> BugoutJournalScopeSpecs:
         journal_scopes_path = f"journals/{journal_id}/scopes"
         headers = {
@@ -62,10 +61,10 @@ class Journal:
 
     def update_journal_scopes(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
         holder_type: HolderType,
-        holder_id: uuid.UUID,
+        holder_id: Union[str, uuid.UUID],
         permission_list: List[str],
     ) -> BugoutJournalScopeSpecs:
         journal_scopes_path = f"journals/{journal_id}/scopes"
@@ -84,10 +83,10 @@ class Journal:
 
     def delete_journal_scopes(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
         holder_type: HolderType,
-        holder_id: uuid.UUID,
+        holder_id: Union[str, uuid.UUID],
         permission_list: List[str],
     ) -> BugoutJournalScopeSpecs:
         journal_scopes_path = f"journals/{journal_id}/scopes"
@@ -105,7 +104,7 @@ class Journal:
         return BugoutJournalScopeSpecs(**result)
 
     # Journal module
-    def create_journal(self, token: uuid.UUID, name: str) -> BugoutJournal:
+    def create_journal(self, token: Union[str, uuid.UUID], name: str) -> BugoutJournal:
         journal_path = "journals/"
         json = {
             "name": name,
@@ -118,7 +117,7 @@ class Journal:
         )
         return BugoutJournal(**result)
 
-    def list_journals(self, token: uuid.UUID) -> BugoutJournals:
+    def list_journals(self, token: Union[str, uuid.UUID]) -> BugoutJournals:
         journal_path = "journals/"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -126,7 +125,9 @@ class Journal:
         result = self._call(method=Method.get, path=journal_path, headers=headers)
         return BugoutJournals(**result)
 
-    def get_journal(self, token: uuid.UUID, journal_id: uuid.UUID) -> BugoutJournal:
+    def get_journal(
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+    ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -135,7 +136,7 @@ class Journal:
         return BugoutJournal(**result)
 
     def update_journal(
-        self, token: uuid.UUID, journal_id: uuid.UUID, name: str
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID], name: str
     ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         json = {
@@ -149,7 +150,9 @@ class Journal:
         )
         return BugoutJournal(**result)
 
-    def delete_journal(self, token: uuid.UUID, journal_id: uuid.UUID) -> BugoutJournal:
+    def delete_journal(
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+    ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -160,8 +163,8 @@ class Journal:
     # Entry module
     def create_entry(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
         title: str,
         content: str,
         tags: List[str] = [],
@@ -187,7 +190,10 @@ class Journal:
         return BugoutJournalEntry(**result)
 
     def get_entry(
-        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
     ) -> BugoutJournalEntry:
         entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
         headers = {
@@ -197,7 +203,7 @@ class Journal:
         return BugoutJournalEntry(**result)
 
     def get_entries(
-        self, token: uuid.UUID, journal_id: uuid.UUID
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
     ) -> BugoutJournalEntries:
         entry_path = f"journals/{journal_id}/entries"
         headers = {
@@ -207,7 +213,10 @@ class Journal:
         return BugoutJournalEntries(**result)
 
     def get_entry_content(
-        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
     ) -> BugoutJournalEntryContent:
         entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
         headers = {
@@ -220,9 +229,9 @@ class Journal:
 
     def update_entry_content(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
-        entry_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
         title: str,
         content: str,
     ) -> BugoutJournalEntryContent:
@@ -244,9 +253,9 @@ class Journal:
 
     def delete_entry(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
-        entry_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
     ) -> BugoutJournalEntry:
         entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
         headers = {
@@ -256,7 +265,9 @@ class Journal:
         return BugoutJournalEntry(**result)
 
     # Tags module
-    def get_most_used_tags(self, token: uuid.UUID, journal_id: uuid.UUID) -> List[Any]:
+    def get_most_used_tags(
+        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+    ) -> List[Any]:
         tags_path = f"journals/{journal_id}/tags"
         headers = {
             "Authorization": f"Bearer {token}",
@@ -266,9 +277,9 @@ class Journal:
 
     def create_tags(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
-        entry_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
         tags: List[str],
     ) -> List[Any]:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
@@ -282,7 +293,10 @@ class Journal:
         return result
 
     def get_tags(
-        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
     ) -> BugoutJournalEntryTags:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
         headers = {
@@ -293,9 +307,9 @@ class Journal:
 
     def update_tags(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
-        entry_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
         tags: List[str],
     ) -> List[Any]:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
@@ -310,9 +324,9 @@ class Journal:
 
     def delete_tag(
         self,
-        token: uuid.UUID,
-        journal_id: uuid.UUID,
-        entry_id: uuid.UUID,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
         tag: str,
     ) -> BugoutJournalEntryTags:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
@@ -344,7 +358,10 @@ class Journal:
         return search_path
 
     def search(
-        self, token: uuid.UUID, journal_id: uuid.UUID, **queries: Dict[str, Any]
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        **queries: Dict[str, Any],
     ) -> BugoutSearchResults:
         search_path_org = f"journals/{journal_id}/search"
         search_path = self._search_query(search_path=search_path_org, **queries)
