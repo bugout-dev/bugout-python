@@ -153,8 +153,157 @@ class Bugout:
     def delete_group(self, token: uuid.UUID, group_id: uuid.UUID) -> data.BugoutGroup:
         return self.group.delete_group(token, group_id)
 
+    # Journal scopes handlers
+    def list_scopes(self, token: uuid.UUID, api: str) -> data.BugoutScopes:
+        return self.journal.list_scopes(token, api)
+
+    def get_journal_scopes(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.get_journal_scopes(token, journal_id)
+
+    def update_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: data.HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.update_journal_scopes(
+            token, journal_id, holder_type, holder_id, permission_list
+        )
+
+    def delete_journal_scopes(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        holder_type: data.HolderType,
+        holder_id: uuid.UUID,
+        permission_list: List[str],
+    ) -> data.BugoutJournalScopeSpecs:
+        return self.journal.delete_journal_scopes(
+            token, journal_id, holder_type, holder_id, permission_list
+        )
+
     # Journal handlers
+    def create_journal(self, token: uuid.UUID, name: str) -> data.BugoutJournal:
+        return self.journal.create_journal(token, name)
+
+    def list_journals(self, token: uuid.UUID) -> data.BugoutJournals:
+        return self.journal.list_journals(token)
+
     def get_journal(
-        self, journal_id: uuid.UUID, token: uuid.UUID
+        self, token: uuid.UUID, journal_id: uuid.UUID
     ) -> data.BugoutJournal:
-        return self.journal.get_journal(journal_id, token)
+        return self.journal.get_journal(token, journal_id)
+
+    def update_journal(
+        self, token: uuid.UUID, journal_id: uuid.UUID, name: str
+    ) -> data.BugoutJournal:
+        return self.journal.update_journal(token, journal_id, name)
+
+    def delete_journal(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournal:
+        return self.journal.delete_journal(token, journal_id)
+
+    # Journal entries
+    def create_entry(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        title: str,
+        content: str,
+        tags: List[str] = [],
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
+    ) -> data.BugoutJournalEntry:
+        return self.journal.create_entry(
+            token,
+            journal_id,
+            title,
+            content,
+            tags,
+            context_url,
+            context_id,
+            context_type,
+        )
+
+    def get_entry(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntry:
+        return self.journal.get_entry(token, journal_id, entry_id)
+
+    def get_entries(
+        self, token: uuid.UUID, journal_id: uuid.UUID
+    ) -> data.BugoutJournalEntries:
+        return self.journal.get_entries(token, journal_id)
+
+    def get_entry_content(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntryContent:
+        return self.journal.get_entry_content(token, journal_id, entry_id)
+
+    def update_entry_content(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        title: str,
+        content: str,
+    ) -> data.BugoutJournalEntryContent:
+        return self.journal.update_entry_content(
+            token, journal_id, entry_id, title, content
+        )
+
+    def delete_entry(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+    ) -> data.BugoutJournalEntry:
+        return self.journal.delete_entry(token, journal_id, entry_id)
+
+    # Tags
+    def get_most_used_tags(self, token: uuid.UUID, journal_id: uuid.UUID) -> List[Any]:
+        return self.journal.get_most_used_tags(token, journal_id)
+
+    def create_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        return self.journal.create_tags(token, journal_id, entry_id, tags)
+
+    def get_tags(
+        self, token: uuid.UUID, journal_id: uuid.UUID, entry_id: uuid.UUID
+    ) -> data.BugoutJournalEntryTags:
+        return self.journal.get_tags(token, journal_id, entry_id)
+
+    def update_tags(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tags: List[str],
+    ) -> List[Any]:
+        return self.journal.update_tags(token, journal_id, entry_id, tags)
+
+    def delete_tag(
+        self,
+        token: uuid.UUID,
+        journal_id: uuid.UUID,
+        entry_id: uuid.UUID,
+        tag: str,
+    ) -> data.BugoutJournalEntryTags:
+        return self.journal.delete_tag(token, journal_id, entry_id, tag)
+
+    # Search
+    def search(
+        self, token: uuid.UUID, journal_id: uuid.UUID, **queries: Dict[str, Any]
+    ) -> data.BugoutSearchResults:
+        return self.journal.search(token, journal_id, **queries)
