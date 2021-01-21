@@ -151,3 +151,30 @@ class BugoutJournalEntryTags(BaseModel):
     journal_id: uuid.UUID
     entry_id: uuid.UUID
     tags: List[str]
+
+
+class BugoutSearchFields(BaseModel):
+    query: str = ""
+    filters: Optional[List[str]] = None
+    limit: int = 10
+    offset: int = 0
+    content: Optional[bool] = True
+
+
+class BugoutSearchResult(BaseModel):
+    entry_url: str
+    content_url: str
+    title: str
+    content: Optional[str]
+    tags: List[str]
+    created_at: str
+    updated_at: str
+    score: float
+
+
+class BugoutSearchResults(BaseModel):
+    total_results: int
+    offset: int
+    next_offset: Optional[int]
+    max_score: float
+    results: List[BugoutSearchResult]

@@ -301,3 +301,9 @@ class Bugout:
         tag: str,
     ) -> data.BugoutJournalEntryTags:
         return self.journal.delete_tag(token, journal_id, entry_id, tag)
+
+    # Search
+    def search(
+        self, token: uuid.UUID, journal_id: uuid.UUID, **queries: Dict[str, Any]
+    ) -> data.BugoutSearchResults:
+        return self.journal.search(token, journal_id, **queries)
