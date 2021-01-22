@@ -176,13 +176,9 @@ class User:
             raise TokenInvalidParameters(
                 "In order to update token, at least one of token_type, or token_note must be specified"
             )
-        if token_type is not None and token_type not in TokenType.__members__:
-            raise TokenInvalidParameters(
-                "Incorrect token type provided, check types at get_token_types()"
-            )
         data: Dict[str, Any] = {"access_token": token}
         if token_type is not None:
-            data.update({"token_type": token_type})
+            data.update({"token_type": token_type.value})
         if token_note is not None:
             data.update({"token_note": token_note})
 
@@ -209,16 +205,12 @@ class User:
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        if token_type is not None and token_type not in TokenType.__members__:
-            raise TokenInvalidParameters(
-                "Incorrect token type provided, check types at get_token_types()"
-            )
         if active is not None and token_type is None:
             get_user_tokens_path += f"?active={active}"
         elif active is None and token_type is not None:
-            get_user_tokens_path += f"?token_type={token_type}"
+            get_user_tokens_path += f"?token_type={token_type.value}"
         elif active is not None and token_type is not None:
-            get_user_tokens_path += f"?active={active}&token_type={token_type}"
+            get_user_tokens_path += f"?active={active}&token_type={token_type.value}"
         result = self._call(
             method=Method.get, path=get_user_tokens_path, headers=headers
         )
