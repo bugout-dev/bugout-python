@@ -5,7 +5,6 @@ from .calls import make_request, InvalidUrlSpec
 from .data import (
     BugoutJournal,
     BugoutJournals,
-    BugoutScope,
     BugoutScopes,
     BugoutJournalScopeSpecs,
     BugoutJournalEntry,
@@ -46,8 +45,7 @@ class Journal:
         result = self._call(
             method=Method.get, path=scopes_path, headers=headers, json=json
         )
-        scopes = [BugoutScope(**item) for item in result]
-        return BugoutScopes(scopes=scopes)
+        return BugoutScopes(**result)
 
     def get_journal_scopes(
         self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
