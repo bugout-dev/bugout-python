@@ -84,7 +84,7 @@ class Group:
             )
 
         data: Dict[str, Any] = {
-            "user_type": user_type,
+            "user_type": user_type.value,
         }
         if username is not None:
             data.update({"username": username})
