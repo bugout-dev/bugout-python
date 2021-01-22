@@ -72,7 +72,7 @@ class Journal:
         journal_scopes_path = f"journals/{journal_id}/scopes"
         json = {
             "holder_type": holder_type.value,
-            "holder_id": holder_id,
+            "holder_id": str(holder_id),
             "permission_list": permission_list,
         }
         headers = {
