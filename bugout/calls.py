@@ -4,8 +4,6 @@ import requests
 
 from .data import Method
 
-REQUESTS_TIMEOUT = 5
-
 
 class InvalidUrlSpec(ValueError):
     """

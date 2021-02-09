@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec, REQUESTS_TIMEOUT
+from .calls import make_request, InvalidUrlSpec
 from .data import (
     Method,
     Role,
@@ -10,6 +10,7 @@ from .data import (
     BugoutGroupMembers,
     BugoutUserGroups,
 )
+from .settings import REQUESTS_TIMEOUT
 
 
 class GroupInvalidParameters(ValueError):

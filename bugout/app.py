@@ -2,10 +2,11 @@ from typing import Any, Dict, List, Optional, Union
 import uuid
 
 from . import data
-from .calls import ping, REQUESTS_TIMEOUT
+from .calls import ping
 from .group import Group
 from .journal import Journal
 from .user import User
+from .settings import REQUESTS_TIMEOUT
 
 
 class InvalidParameters(ValueError):

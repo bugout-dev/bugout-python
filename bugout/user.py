@@ -1,8 +1,9 @@
 from typing import Any, Dict, List, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec, REQUESTS_TIMEOUT
+from .calls import make_request, InvalidUrlSpec
 from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
+from .settings import REQUESTS_TIMEOUT
 
 
 class TokenInvalidParameters(ValueError):
