@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec
+from .calls import make_request, InvalidUrlSpec, REQUESTS_TIMEOUT
 from .data import (
     BugoutJournal,
     BugoutJournals,
@@ -23,14 +23,17 @@ class Journal:
     Represent a journal from Bugout.
     """
 
-    def __init__(self, url: Optional[str] = None) -> None:
+    def __init__(
+        self, url: Optional[str] = None, timeout: float = REQUESTS_TIMEOUT
+    ) -> None:
         if url is None:
             raise InvalidUrlSpec("Invalid spire url specified")
         self.url = url
+        self.timeout = timeout
 
     def _call(self, method: Method, path: str, **kwargs):
         url = f"{self.url.rstrip('/')}/{path.rstrip('/')}"
-        result = make_request(method=method, url=url, **kwargs)
+        result = make_request(method=method, url=url, timeout=self.timeout, **kwargs)
         return result
 
     # Scope module

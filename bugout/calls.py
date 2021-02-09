@@ -1,8 +1,10 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict
 
 import requests
 
 from .data import Method
+
+REQUESTS_TIMEOUT = 5
 
 
 class InvalidUrlSpec(ValueError):
