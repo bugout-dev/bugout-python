@@ -33,6 +33,12 @@ class HolderType(Enum):
     group = "group"
 
 
+@unique
+class IntegrationType(Enum):
+    slack = "slack"
+    github = "github"
+
+
 class BugoutUser(BaseModel):
     id: uuid.UUID = Field(alias="user_id")
     username: str
@@ -65,6 +71,14 @@ class BugoutUserTokens(BaseModel):
     user_id: uuid.UUID
     username: str
     tokens: List[BugoutToken] = Field(alias="token")
+
+
+class BugoutUserIntegration(BaseModel):
+    user_id: uuid.UUID
+    integration_user_id: str
+    access_token: Optional[str] = None
+    team_ids: List[str] = Field(default_factory=list)
+    integration_type = IntegrationType
 
 
 class BugoutGroup(BaseModel):

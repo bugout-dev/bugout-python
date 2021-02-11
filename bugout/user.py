@@ -2,7 +2,15 @@ from typing import Any, Dict, List, Optional, Union
 import uuid
 
 from .calls import make_request, InvalidUrlSpec
-from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
+from .data import (
+    Method,
+    TokenType,
+    IntegrationType,
+    BugoutUser,
+    BugoutToken,
+    BugoutUserTokens,
+    BugoutUserIntegration,
+)
 from .settings import REQUESTS_TIMEOUT
 
 
@@ -219,3 +227,18 @@ class User:
             method=Method.get, path=get_user_tokens_path, headers=headers
         )
         return BugoutUserTokens(**result)
+
+    def update_user_integration(
+        self, token: Union[str, uuid.UUID], integration_data: Dict[str, Any]
+    ) -> BugoutUserIntegration:
+        add_user_integration_path = f"user/integration"
+        headers = {
+            "x-bugout-installation-token": token,
+        }
+        result = self._call(
+            method=Method.put,
+            path=add_user_integration_path,
+            headers=headers,
+            json=integration_data,
+        )
+        return BugoutUserIntegration(**result)

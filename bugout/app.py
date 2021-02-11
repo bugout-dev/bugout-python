@@ -122,6 +122,17 @@ class Bugout:
         self.user.timeout = timeout
         return self.user.delete_user(token=token, user_id=user_id, password=password)
 
+    def update_user_integration(
+        self,
+        token: Union[str, uuid.UUID],
+        integration_data: Dict[str, Any],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutUserIntegration:
+        self.user.timeout = timeout
+        return self.user.update_user_integration(
+            token=token, integration_data=integration_data
+        )
+
     # Token handlers
     def create_token(
         self, username: str, password: str, timeout: float = REQUESTS_TIMEOUT
