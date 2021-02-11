@@ -4,7 +4,7 @@ Python client library for Bugout API
 ## Setup
 - Add variables from `sample.env` in you development environment
 ```bash
-export BUGOUT_REQUESTS_TIMEOUT=5
+export BUGOUT_TIMEOUT_SECONDS=5
 ```
 
 ```python
