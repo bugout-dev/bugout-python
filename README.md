@@ -4,7 +4,7 @@ Python client library for Bugout API
 ## Setup
 - Add variables from `sample.env` in you development environment
 ```bash
-export BUGOUT_REQUESTS_TIMEOUT=5
+export BUGOUT_REQUESTS_TIMEOUT_SECONDS=5
 ```
 
 ```python
@@ -13,7 +13,7 @@ from bugout.app import Bugout
 def main():
     bugout = Bugout(brood_api_url="http://localhost:9001", spire_api_url="http://localhost:9002")
     
-    user = bugout.get_user(<user token ID>)
+    user = bugout.get_user(<user token ID>, timeout=2)
     print(f"User name is {user.username}")
     
     group = bugout.get_group(<user token ID>, <group ID>)
