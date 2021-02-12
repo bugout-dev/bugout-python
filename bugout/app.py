@@ -76,6 +76,18 @@ class Bugout:
         self.user.timeout = timeout
         return self.user.get_user_by_id(token=token, user_id=user_id)
 
+    def find_user(
+        self,
+        token: Union[str, uuid.UUID],
+        username: str,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutUser:
+        self.user.timeout = timeout
+        return self.user.find_user(
+            token=token,
+            username=username,
+        )
+
     def confirm_email(
         self,
         token: Union[str, uuid.UUID],

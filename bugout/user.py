@@ -75,6 +75,18 @@ class User:
         )
         return BugoutUser(**result)
 
+    def find_user(
+        self,
+        token: Union[str, uuid.UUID],
+        username: str,
+    ) -> BugoutUser:
+        find_user_path = f"user/find?username={username}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=find_user_path, headers=headers)
+        return BugoutUser(**result)
+
     def confirm_email(
         self, token: Union[str, uuid.UUID], verification_code: str
     ) -> BugoutUser:
