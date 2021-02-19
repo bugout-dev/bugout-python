@@ -47,6 +47,25 @@ class Group:
         result = self._call(method=Method.get, path=get_group_path, headers=headers)
         return BugoutGroup(**result)
 
+    def find_group(
+        self,
+        group_id: Optional[Union[str, uuid.UUID]] = None,
+        name: Optional[str] = None,
+        token: Union[str, uuid.UUID] = None,
+    ) -> BugoutGroup:
+        find_group_path = f"group/find"
+        if group_id is not None and name is None:
+            find_group_path += f"?group_id={group_id}"
+        elif group_id is None and name is not None:
+            find_group_path += f"?name={name}"
+        elif group_id is not None and name is not None:
+            find_group_path += f"?group_id={group_id}&name={name}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=find_group_path, headers=headers)
+        return BugoutGroup(**result)
+
     def get_user_groups(self, token: Union[str, uuid.UUID]) -> BugoutUserGroups:
         get_user_groups_path = "groups"
         headers = {

@@ -75,6 +75,21 @@ class User:
         )
         return BugoutUser(**result)
 
+    def find_user(
+        self,
+        username: str,
+        token: Union[str, uuid.UUID] = None,
+        installation_token: str = None,
+    ) -> BugoutUser:
+        find_user_path = f"user/find?username={username}"
+        headers = {}
+        if token is not None:
+            headers.update({"Authorization": f"Bearer {token}"})
+        if installation_token is not None:
+            headers.update({"x-bugout-installation-token": installation_token})
+        result = self._call(method=Method.get, path=find_user_path, headers=headers)
+        return BugoutUser(**result)
+
     def confirm_email(
         self, token: Union[str, uuid.UUID], verification_code: str
     ) -> BugoutUser:

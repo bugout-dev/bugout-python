@@ -76,6 +76,18 @@ class Bugout:
         self.user.timeout = timeout
         return self.user.get_user_by_id(token=token, user_id=user_id)
 
+    def find_user(
+        self,
+        username: str,
+        token: Union[str, uuid.UUID] = None,
+        installation_token: str = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutUser:
+        self.user.timeout = timeout
+        return self.user.find_user(
+            username=username, token=token, installation_token=installation_token
+        )
+
     def confirm_email(
         self,
         token: Union[str, uuid.UUID],
@@ -184,6 +196,16 @@ class Bugout:
     ) -> data.BugoutGroup:
         self.group.timeout = timeout
         return self.group.get_group(token=token, group_id=group_id)
+
+    def find_group(
+        self,
+        group_id: Optional[Union[str, uuid.UUID]] = None,
+        name: Optional[str] = None,
+        token: Union[str, uuid.UUID] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutGroup:
+        self.user.timeout = timeout
+        return self.group.find_group(group_id=group_id, name=name, token=token)
 
     def get_user_groups(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
