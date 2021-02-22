@@ -6,7 +6,7 @@ from .calls import ping
 from .group import Group
 from .journal import Journal
 from .user import User
-from .settings import REQUESTS_TIMEOUT
+from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
 
 
 class InvalidParameters(ValueError):
@@ -17,7 +17,9 @@ class InvalidParameters(ValueError):
 
 class Bugout:
     def __init__(
-        self, brood_api_url: Optional[str] = None, spire_api_url: Optional[str] = None
+        self,
+        brood_api_url: str = BUGOUT_BROOD_URL,
+        spire_api_url: str = BUGOUT_SPIRE_URL,
     ) -> None:
         self.brood_api_url = brood_api_url
         self.spire_api_url = spire_api_url
@@ -35,13 +37,9 @@ class Bugout:
         return self.spire_api_url
 
     def brood_ping(self) -> Dict[str, str]:
-        if self.brood_api_url is None:
-            raise InvalidParameters("Brood API url should be provided")
         return ping(self.brood_api_url)
 
     def spire_ping(self) -> Dict[str, str]:
-        if self.spire_api_url is None:
-            raise InvalidParameters("Spire API url should be provided")
         return ping(self.spire_api_url)
 
     # User handlers
