@@ -1,5 +1,8 @@
 import os
 
+BUGOUT_BROOD_URL = "https://auth.bugout.dev"
+BUGOUT_SPIRE_URL = "https://spire.bugout.dev"
+
 REQUESTS_TIMEOUT = 5
 REQUESTS_TIMEOUT_RAW = os.environ.get("BUGOUT_TIMEOUT_SECONDS")
 try:
