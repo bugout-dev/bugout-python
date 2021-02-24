@@ -362,6 +362,16 @@ class Bugout:
             token=token, journal_id=journal_id, name=name
         )
 
+    def copy_journal(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournal:
+        self.journal.timeout = timeout
+        return self.journal.copy_journal(token=token, journal_id=journal_id, **kwargs)
+
     def delete_journal(
         self,
         token: Union[str, uuid.UUID],

@@ -154,6 +154,21 @@ class Journal:
         )
         return BugoutJournal(**result)
 
+    def copy_journal(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournal:
+        journal_copy_path = f"journals/{journal_id}/copy"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.post, path=journal_copy_path, headers=headers)
+        return BugoutJournal(**result)
+
     def delete_journal(
         self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
     ) -> BugoutJournal:
