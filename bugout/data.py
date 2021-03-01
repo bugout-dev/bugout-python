@@ -153,14 +153,6 @@ class BugoutJournalEntryTags(BaseModel):
     tags: List[str]
 
 
-class BugoutSearchFields(BaseModel):
-    query: str = ""
-    filters: Optional[List[str]] = None
-    limit: int = 10
-    offset: int = 0
-    content: Optional[bool] = True
-
-
 class BugoutSearchResult(BaseModel):
     entry_url: str
     content_url: str

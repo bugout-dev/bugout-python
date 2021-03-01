@@ -525,8 +525,11 @@ class Bugout:
         self,
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
+        query: str,
+        limit: int = 10,
+        offset: int = 0,
+        content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
-        **queries: Dict[str, Any],
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
-        return self.journal.search(token=token, journal_id=journal_id, **queries)
+        return self.journal.search(token, journal_id, query, limit, offset, content)
