@@ -224,7 +224,7 @@ class User:
         }
         query_params = {}
         if active is not None:
-            query_params.update({"active": active})
+            query_params.update({"active": str(int(active))})
         if token_type is not None:
             query_params.update({"token_type": token_type.value})
         result = self._call(
