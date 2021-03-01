@@ -222,13 +222,15 @@ class User:
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        if active is not None and token_type is None:
-            get_user_tokens_path += f"?active={active}"
-        elif active is None and token_type is not None:
-            get_user_tokens_path += f"?token_type={token_type.value}"
-        elif active is not None and token_type is not None:
-            get_user_tokens_path += f"?active={active}&token_type={token_type.value}"
+        query_params = {}
+        if active is not None:
+            query_params.update({"active": active})
+        if token_type is not None:
+            query_params.update({"token_type": token_type.value})
         result = self._call(
-            method=Method.get, path=get_user_tokens_path, headers=headers
+            method=Method.get,
+            path=get_user_tokens_path,
+            params=query_params,
+            headers=headers,
         )
         return BugoutUserTokens(**result)

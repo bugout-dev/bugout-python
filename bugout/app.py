@@ -192,13 +192,13 @@ class Bugout:
 
     def find_group(
         self,
+        token: Union[str, uuid.UUID],
         group_id: Optional[Union[str, uuid.UUID]] = None,
         name: Optional[str] = None,
-        token: Union[str, uuid.UUID] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutGroup:
         self.user.timeout = timeout
-        return self.group.find_group(group_id=group_id, name=name, token=token)
+        return self.group.find_group(token=token, group_id=group_id, name=name)
 
     def get_user_groups(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
