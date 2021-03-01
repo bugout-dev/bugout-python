@@ -192,13 +192,13 @@ class Bugout:
 
     def find_group(
         self,
+        token: Union[str, uuid.UUID],
         group_id: Optional[Union[str, uuid.UUID]] = None,
         name: Optional[str] = None,
-        token: Union[str, uuid.UUID] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutGroup:
         self.user.timeout = timeout
-        return self.group.find_group(group_id=group_id, name=name, token=token)
+        return self.group.find_group(token=token, group_id=group_id, name=name)
 
     def get_user_groups(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
@@ -525,8 +525,11 @@ class Bugout:
         self,
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
+        query: str,
+        limit: int = 10,
+        offset: int = 0,
+        content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
-        **queries: Dict[str, Any],
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
-        return self.journal.search(token=token, journal_id=journal_id, **queries)
+        return self.journal.search(token, journal_id, query, limit, offset, content)

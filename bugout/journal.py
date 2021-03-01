@@ -11,7 +11,6 @@ from .data import (
     BugoutJournalEntries,
     BugoutJournalEntryContent,
     BugoutJournalEntryTags,
-    BugoutSearchFields,
     BugoutSearchResults,
     HolderType,
     Method,
@@ -344,34 +343,26 @@ class Journal:
         return BugoutJournalEntryTags(**result)
 
     # Search module
-    def _search_query(self, search_path: str, **queries: Dict[str, Any]) -> str:
-        """
-        Validate search arguments with pydantic model BugoutSearchFields and
-        generate search_path with queries.
-        """
-        field_queries = BugoutSearchFields(**queries)
-        fields_list = list(BugoutSearchFields.schema().get("properties").keys())  # type: ignore
-
-        search_path += f"?{fields_list[0]}={getattr(field_queries, fields_list[0])}"
-        for field in fields_list[1:]:
-            attr = getattr(field_queries, field)
-            if type(attr) is list:
-                attr = ",".join(attr)
-            search_path += f"&{field}={attr}"
-
-        return search_path
-
     def search(
         self,
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
-        **queries: Dict[str, Any],
+        query: str,
+        limit: int = 10,
+        offset: int = 0,
+        content: bool = True,
     ) -> BugoutSearchResults:
-        search_path_org = f"journals/{journal_id}/search"
-        search_path = self._search_query(search_path=search_path_org, **queries)
-
+        search_path = f"journals/{journal_id}/search"
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        result = self._call(method=Method.get, path=search_path, headers=headers)
+        query_params = {
+            "q": query,
+            "limit": limit,
+            "offset": offset,
+            "content": content,
+        }
+        result = self._call(
+            method=Method.get, path=search_path, params=query_params, headers=headers
+        )
         return BugoutSearchResults(**result)

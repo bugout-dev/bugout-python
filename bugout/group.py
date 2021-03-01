@@ -49,21 +49,29 @@ class Group:
 
     def find_group(
         self,
+        token: Union[str, uuid.UUID],
         group_id: Optional[Union[str, uuid.UUID]] = None,
         name: Optional[str] = None,
-        token: Union[str, uuid.UUID] = None,
     ) -> BugoutGroup:
         find_group_path = f"group/find"
-        if group_id is not None and name is None:
-            find_group_path += f"?group_id={group_id}"
-        elif group_id is None and name is not None:
-            find_group_path += f"?name={name}"
-        elif group_id is not None and name is not None:
-            find_group_path += f"?group_id={group_id}&name={name}"
+        if group_id is None and name is None:
+            raise GroupInvalidParameters(
+                "In order to find group, at least one of name, or id must be specified"
+            )
+        query_params = {}
+        if group_id is not None:
+            query_params.update({"group_id": group_id})
+        if name is not None:
+            query_params.update({"name": name})
         headers = {
             "Authorization": f"Bearer {token}",
         }
-        result = self._call(method=Method.get, path=find_group_path, headers=headers)
+        result = self._call(
+            method=Method.get,
+            path=find_group_path,
+            params=query_params,
+            headers=headers,
+        )
         return BugoutGroup(**result)
 
     def get_user_groups(self, token: Union[str, uuid.UUID]) -> BugoutUserGroups:

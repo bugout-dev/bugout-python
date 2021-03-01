@@ -1,6 +1,5 @@
 import os
 from importlib.machinery import SourceFileLoader
-from pkg_resources import parse_requirements
 from setuptools import find_packages, setup
 
 MODULE_NAME = "bugout"
