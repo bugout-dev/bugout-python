@@ -57,6 +57,7 @@ class BugoutToken(BaseModel):
     active: bool
     token_type: Optional[str]
     note: Optional[str]
+    restricted: Optional[bool]
     created_at: datetime
     updated_at: datetime
 

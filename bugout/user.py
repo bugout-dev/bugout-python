@@ -142,15 +142,18 @@ class User:
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
-        password: str,
+        password: Optional[str] = None,
+        **kwargs: Dict[str, Any],
     ) -> BugoutUser:
         delete_user_path = f"user/{user_id}"
-        data = {
-            "password": password,
-        }
+        data = {}
+        if password is not None:
+            data.update({"password": password})
         headers = {
             "Authorization": f"Bearer {token}",
         }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
         result = self._call(
             method=Method.delete, path=delete_user_path, headers=headers, data=data
         )
@@ -164,6 +167,14 @@ class User:
             "password": password,
         }
         result = self._call(method=Method.post, path=create_token_path, data=data)
+        return BugoutToken(**result)
+
+    def create_token_restricted(self, token: Union[str, uuid.UUID]) -> BugoutToken:
+        create_token_path = "token/restricted"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.post, path=create_token_path, headers=headers)
         return BugoutToken(**result)
 
     def revoke_token(self, token: Union[str, uuid.UUID]) -> uuid.UUID:

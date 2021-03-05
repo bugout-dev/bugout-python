@@ -121,11 +121,14 @@ class Bugout:
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
-        password: str,
+        password: Optional[str] = None,
         timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
-        return self.user.delete_user(token=token, user_id=user_id, password=password)
+        return self.user.delete_user(
+            token=token, user_id=user_id, password=password, **kwargs
+        )
 
     # Token handlers
     def create_token(
@@ -133,6 +136,14 @@ class Bugout:
     ) -> data.BugoutToken:
         self.user.timeout = timeout
         return self.user.create_token(username=username, password=password)
+
+    def create_token_restricted(
+        self,
+        token: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutToken:
+        self.user.timeout = timeout
+        return self.user.create_token_restricted(token=token)
 
     def revoke_token(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
