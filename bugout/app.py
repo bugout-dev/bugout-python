@@ -146,10 +146,13 @@ class Bugout:
         return self.user.create_token_restricted(token=token)
 
     def revoke_token(
-        self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
+        self,
+        token: Union[str, uuid.UUID],
+        target_token: Optional[Union[str, uuid.UUID]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> uuid.UUID:
         self.user.timeout = timeout
-        return self.user.revoke_token(token=token)
+        return self.user.revoke_token(token=token, target_token=target_token)
 
     def revoke_token_by_id(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT

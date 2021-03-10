@@ -177,13 +177,20 @@ class User:
         result = self._call(method=Method.post, path=create_token_path, headers=headers)
         return BugoutToken(**result)
 
-    def revoke_token(self, token: Union[str, uuid.UUID]) -> uuid.UUID:
+    def revoke_token(
+        self,
+        token: Union[str, uuid.UUID],
+        target_token: Optional[Union[str, uuid.UUID]] = None,
+    ) -> uuid.UUID:
         revoke_token_path = "token"
         headers = {
             "Authorization": f"Bearer {token}",
         }
+        data = {}
+        if target_token is not None:
+            data.update({"target_token": target_token})
         result = self._call(
-            method=Method.delete, path=revoke_token_path, headers=headers
+            method=Method.delete, path=revoke_token_path, headers=headers, data=data
         )
         return result
 
