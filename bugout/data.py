@@ -171,3 +171,16 @@ class BugoutSearchResults(BaseModel):
     next_offset: Optional[int]
     max_score: float
     results: List[BugoutSearchResult]
+
+
+class BugoutHumbugIntegration(BaseModel):
+    id: uuid.UUID
+    group_id: uuid.UUID
+    journal_id: uuid.UUID
+    journal_name: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class BugoutHumbugIntegrationsList(BaseModel):
+    integrations: List[BugoutHumbugIntegration] = Field(default_factory=list)
