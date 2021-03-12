@@ -235,6 +235,7 @@ class User:
         token: Union[str, uuid.UUID],
         active: Optional[bool] = None,
         token_type: Optional[TokenType] = None,
+        restricted: Optional[bool] = None,
     ) -> BugoutUserTokens:
         get_user_tokens_path = "tokens"
         headers = {
@@ -245,6 +246,8 @@ class User:
             query_params.update({"active": str(int(active))})
         if token_type is not None:
             query_params.update({"token_type": token_type.value})
+        if restricted is not None:
+            query_params.update({"restricted": str(int(restricted))})
         result = self._call(
             method=Method.get,
             path=get_user_tokens_path,

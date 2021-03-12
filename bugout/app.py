@@ -185,6 +185,7 @@ class Bugout:
         token: Union[str, uuid.UUID],
         active: Optional[bool] = None,
         token_type: Optional[Union[str, data.TokenType]] = None,
+        restricted: Optional[bool] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutUserTokens:
         self.user.timeout = timeout
@@ -192,6 +193,7 @@ class Bugout:
             token=token,
             active=active,
             token_type=data.TokenType(token_type) if token_type is not None else None,
+            restricted=restricted,
         )
 
     # Group handlers
