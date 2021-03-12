@@ -348,10 +348,16 @@ class Bugout:
 
     # Journal handlers
     def create_journal(
-        self, token: Union[str, uuid.UUID], name: str, timeout: float = REQUESTS_TIMEOUT
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        journal_type: Union[str, data.JournalTypes],
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
-        return self.journal.create_journal(token=token, name=name)
+        return self.journal.create_journal(
+            token=token, name=name, journal_type=data.JournalTypes(journal_type)
+        )
 
     def list_journals(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT

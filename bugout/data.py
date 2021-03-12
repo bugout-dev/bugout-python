@@ -33,6 +33,11 @@ class HolderType(Enum):
     group = "group"
 
 
+class JournalTypes(Enum):
+    DEFAULT = "default"
+    HUMBUG = "humbug"
+
+
 class BugoutUser(BaseModel):
     id: uuid.UUID = Field(alias="user_id")
     username: str
