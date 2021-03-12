@@ -351,10 +351,12 @@ class Bugout:
         self,
         token: Union[str, uuid.UUID],
         name: str,
-        journal_type: Union[str, data.JournalTypes],
+        journal_type: Optional[Union[str, data.JournalTypes]] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
+        if journal_type is None:
+            journal_type = data.JournalTypes.DEFAULT
         return self.journal.create_journal(
             token=token, name=name, journal_type=data.JournalTypes(journal_type)
         )

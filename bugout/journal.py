@@ -112,7 +112,7 @@ class Journal:
         self,
         token: Union[str, uuid.UUID],
         name: str,
-        journal_type: JournalTypes = JournalTypes.DEFAULT,
+        journal_type: JournalTypes,
     ) -> BugoutJournal:
         journal_path = "journals/"
         json = {"name": name, "journal_type": journal_type.value}
