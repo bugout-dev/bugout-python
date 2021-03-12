@@ -14,6 +14,7 @@ from .data import (
     BugoutSearchResults,
     HolderType,
     Method,
+    JournalTypes,
 )
 from .settings import REQUESTS_TIMEOUT
 
@@ -107,11 +108,14 @@ class Journal:
         return BugoutJournalScopeSpecs(**result)
 
     # Journal module
-    def create_journal(self, token: Union[str, uuid.UUID], name: str) -> BugoutJournal:
+    def create_journal(
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        journal_type: JournalTypes,
+    ) -> BugoutJournal:
         journal_path = "journals/"
-        json = {
-            "name": name,
-        }
+        json = {"name": name, "journal_type": journal_type.value}
         headers = {
             "Authorization": f"Bearer {token}",
         }

@@ -4,6 +4,7 @@ import uuid
 from . import data
 from .calls import ping
 from .group import Group
+from .humbug import Humbug
 from .journal import Journal
 from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
@@ -26,6 +27,7 @@ class Bugout:
 
         self.user = User(self.brood_api_url)
         self.group = Group(self.brood_api_url)
+        self.humbug = Humbug(self.spire_api_url)
         self.journal = Journal(self.spire_api_url)
 
     @property
@@ -185,6 +187,7 @@ class Bugout:
         token: Union[str, uuid.UUID],
         active: Optional[bool] = None,
         token_type: Optional[Union[str, data.TokenType]] = None,
+        restricted: Optional[bool] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutUserTokens:
         self.user.timeout = timeout
@@ -192,6 +195,7 @@ class Bugout:
             token=token,
             active=active,
             token_type=data.TokenType(token_type) if token_type is not None else None,
+            restricted=restricted,
         )
 
     # Group handlers
@@ -344,10 +348,18 @@ class Bugout:
 
     # Journal handlers
     def create_journal(
-        self, token: Union[str, uuid.UUID], name: str, timeout: float = REQUESTS_TIMEOUT
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        journal_type: Optional[Union[str, data.JournalTypes]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
-        return self.journal.create_journal(token=token, name=name)
+        if journal_type is None:
+            journal_type = data.JournalTypes.DEFAULT
+        return self.journal.create_journal(
+            token=token, name=name, journal_type=data.JournalTypes(journal_type)
+        )
 
     def list_journals(
         self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
@@ -547,3 +559,13 @@ class Bugout:
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
         return self.journal.search(token, journal_id, query, limit, offset, content)
+
+    # Humbug
+    def get_humbug_integrations(
+        self,
+        token: Union[str, uuid.UUID],
+        group_id: Optional[Union[str, uuid.UUID]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutHumbugIntegrationsList:
+        self.humbug.timeout = timeout
+        return self.humbug.get_humbug_integrations(token=token, group_id=group_id)
