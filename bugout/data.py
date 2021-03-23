@@ -133,19 +133,32 @@ class BugoutJournals(BaseModel):
 
 class BugoutJournalEntry(BaseModel):
     id: uuid.UUID
-    journal_url: str
+    journal_url: Optional[str]
     content_url: Optional[str]
     title: Optional[str]
     content: Optional[str]
     tags: List[str] = Field(default_factory=list)
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
     context_url: Optional[str]
     context_type: Optional[str]
 
 
 class BugoutJournalEntries(BaseModel):
     entries: List[BugoutJournalEntry]
+
+
+class BugoutJournalEntryRequest(BaseModel):
+    title: str
+    content: str
+    tags: List[str] = Field(default_factory=list)
+    context_url: Optional[str]
+    context_id: Optional[str]
+    context_type: Optional[str]
+
+
+class BugoutJournalEntriesRequest(BaseModel):
+    entries: List[BugoutJournalEntryRequest] = Field(default_factory=list)
 
 
 class BugoutJournalEntryContent(BaseModel):

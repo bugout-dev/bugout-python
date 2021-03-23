@@ -422,6 +422,23 @@ class Bugout:
             context_type=context_type,
         )
 
+    def create_entries_pack(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries: List[Dict[str, Any]],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutJournalEntries:
+        self.journal.timeout = timeout
+        entries_obj = data.BugoutJournalEntriesRequest(
+            entries=[data.BugoutJournalEntryRequest(**entry) for entry in entries]
+        )
+        return self.journal.create_entries_pack(
+            token=token,
+            journal_id=journal_id,
+            entries=entries_obj,
+        )
+
     def get_entry(
         self,
         token: Union[str, uuid.UUID],
