@@ -568,13 +568,16 @@ class Bugout:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         query: str,
+        filters: List[str] = [],
         limit: int = 10,
         offset: int = 0,
         content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
-        return self.journal.search(token, journal_id, query, limit, offset, content)
+        return self.journal.search(
+            token, journal_id, query, filters, limit, offset, content
+        )
 
     # Humbug
     def get_humbug_integrations(

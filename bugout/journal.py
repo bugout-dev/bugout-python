@@ -381,6 +381,7 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         query: str,
+        filters: List[str] = [],
         limit: int = 10,
         offset: int = 0,
         content: bool = True,
@@ -391,6 +392,7 @@ class Journal:
         }
         query_params = {
             "q": query,
+            "filters": filters,
             "limit": limit,
             "offset": offset,
             "content": content,
