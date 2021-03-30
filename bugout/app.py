@@ -568,7 +568,7 @@ class Bugout:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         query: str,
-        filters: List[str] = [],
+        filters: Optional[List[str]] = None,
         limit: int = 10,
         offset: int = 0,
         content: bool = True,
