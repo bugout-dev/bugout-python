@@ -9,6 +9,7 @@ from .data import (
     BugoutJournalScopeSpecs,
     BugoutJournalEntry,
     BugoutJournalEntries,
+    BugoutJournalEntriesRequest,
     BugoutJournalEntryContent,
     BugoutJournalEntryTags,
     BugoutSearchResults,
@@ -196,6 +197,34 @@ class Journal:
         )
         return BugoutJournalEntry(**result)
 
+    def create_entries_pack(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries: BugoutJournalEntriesRequest,
+    ) -> BugoutJournalEntries:
+        entry_path = f"journals/{journal_id}/bulk"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        json = {
+            "entries": [
+                {
+                    "title": entry.title,
+                    "content": entry.content,
+                    "tags": entry.tags,
+                    "context_url": entry.context_url,
+                    "context_id": entry.context_id,
+                    "context_type": entry.context_type,
+                }
+                for entry in entries.entries
+            ]
+        }
+        result = self._call(
+            method=Method.post, path=entry_path, headers=headers, json=json
+        )
+        return BugoutJournalEntries(**result)
+
     def get_entry(
         self,
         token: Union[str, uuid.UUID],
@@ -352,6 +381,7 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         query: str,
+        filters: Optional[List[str]] = None,
         limit: int = 10,
         offset: int = 0,
         content: bool = True,
@@ -362,6 +392,7 @@ class Journal:
         }
         query_params = {
             "q": query,
+            "filters": filters if filters is not None else [],
             "limit": limit,
             "offset": offset,
             "content": content,
