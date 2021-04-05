@@ -41,7 +41,7 @@ setup(
     install_requires=["pydantic>=1.6", "requests"],
     extras_require={
         "dev": ["black", "mypy"],
-        "distribute": ["setuptools", "twine", "wheel", "anaconda-client"],
+        "distribute": ["setuptools", "twine", "wheel"],
     },
     entry_points={
         "console_scripts": ["{0}-py = {0}.__main__:main".format(MODULE_NAME)]
