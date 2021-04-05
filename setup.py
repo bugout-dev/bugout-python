@@ -39,6 +39,11 @@ setup(
     package_data={"bugout": ["py.typed"]},
     zip_safe=False,
     install_requires=["pydantic>=1.6", "requests"],
-    extras_require={"dev": ["black", "mypy"]},
-    entry_points={"console_scripts": ["{0}-py = {0}.__main__:main".format(MODULE_NAME)]},
+    extras_require={
+        "dev": ["black", "mypy"],
+        "distribute": ["setuptools", "twine", "wheel", "anaconda-client"],
+    },
+    entry_points={
+        "console_scripts": ["{0}-py = {0}.__main__:main".format(MODULE_NAME)]
+    },
 )

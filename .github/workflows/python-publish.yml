@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
+        pip install -e .[distribute]
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
@@ -29,3 +29,7 @@ jobs:
       run: |
         python setup.py sdist bdist_wheel
         twine upload dist/*
+    -name: Publis to Anaconda
+      run: |
+        anaconda login --username ${{ secrets.ANACONDA_USERNAME }} --password ${{ secrets.ANACONDA_PASSWORD }}
+        anaconda upload dist/*.tar.gz
