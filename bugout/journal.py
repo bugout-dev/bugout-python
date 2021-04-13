@@ -65,8 +65,9 @@ class Journal:
         }
         query_params = {}
         if holder_ids is not None:
-            holder_ids_string = ",".join(str(holder_ids))
-            query_params = {"holder_ids": holder_ids_string}
+            holder_ids_string = [str(holder_id) for holder_id in holder_ids]
+            holder_ids_param = ",".join(holder_ids_string)
+            query_params = {"holder_ids": holder_ids_param}
         result = self._call(
             method=Method.get,
             path=journal_scopes_path,
