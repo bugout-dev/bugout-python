@@ -107,6 +107,17 @@ class BugoutScopes(BaseModel):
     scopes: List[BugoutScope]
 
 
+class BugoutJournalPermission(BaseModel):
+    holder_type: HolderType
+    holder_id: str
+    permissions: List[str] = Field(default_factory=list)
+
+
+class BugoutJournalPermissions(BaseModel):
+    journal_id: uuid.UUID
+    permissions: List[BugoutJournalPermission] = Field(default_factory=list)
+
+
 class BugoutJournalScopeSpec(BaseModel):
     journal_id: uuid.UUID
     holder_type: HolderType
