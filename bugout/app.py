@@ -300,6 +300,18 @@ class Bugout:
         self.journal.timeout = timeout
         return self.journal.list_scopes(token=token, api=api)
 
+    def get_journal_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        holder_ids: Optional[List[Union[str, uuid.UUID]]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutJournalPermissions:
+        self.journal.timeout = timeout
+        return self.journal.get_journal_permissions(
+            token=token, journal_id=journal_id, holder_ids=holder_ids
+        )
+
     def get_journal_scopes(
         self,
         token: Union[str, uuid.UUID],
@@ -578,6 +590,15 @@ class Bugout:
         return self.journal.search(
             token, journal_id, query, filters, limit, offset, content
         )
+
+    # Public
+    def check_journal_public(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> bool:
+        self.journal.timeout = timeout
+        return self.journal.check_journal_public(journal_id=journal_id)
 
     # Humbug
     def get_humbug_integrations(
