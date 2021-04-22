@@ -5,6 +5,7 @@ from .calls import make_request, InvalidUrlSpec
 from .data import (
     BugoutJournal,
     BugoutJournals,
+    BugoutJournalPermissions,
     BugoutScopes,
     BugoutJournalScopeSpecs,
     BugoutJournalEntry,
@@ -51,6 +52,29 @@ class Journal:
             method=Method.get, path=scopes_path, headers=headers, json=json
         )
         return BugoutScopes(**result)
+
+    def get_journal_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        holder_ids: Optional[List[Union[str, uuid.UUID]]] = None,
+    ) -> BugoutJournalPermissions:
+        journal_scopes_path = f"journals/{journal_id}/permissions"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        query_params = {}
+        if holder_ids is not None:
+            holder_ids_string = [str(holder_id) for holder_id in holder_ids]
+            holder_ids_param = ",".join(holder_ids_string)
+            query_params = {"holder_ids": holder_ids_param}
+        result = self._call(
+            method=Method.get,
+            path=journal_scopes_path,
+            params=query_params,
+            headers=headers,
+        )
+        return BugoutJournalPermissions(**result)
 
     def get_journal_scopes(
         self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
@@ -401,3 +425,10 @@ class Journal:
             method=Method.get, path=search_path, params=query_params, headers=headers
         )
         return BugoutSearchResults(**result)
+
+    # Public module
+    def check_journal_public(self, journal_id: Union[str, uuid.UUID]) -> bool:
+        journal_path = "public/check"
+        query_params = {"journal_id": journal_id}
+        result = self._call(method=Method.get, path=journal_path, params=query_params)
+        return result

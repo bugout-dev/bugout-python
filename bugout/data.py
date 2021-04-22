@@ -97,6 +97,17 @@ class BugoutGroupMembers(BaseModel):
     users: List[BugoutUserShort]
 
 
+class BugoutJournalPermission(BaseModel):
+    holder_type: HolderType
+    holder_id: str
+    permissions: List[str] = Field(default_factory=list)
+
+
+class BugoutJournalPermissions(BaseModel):
+    journal_id: uuid.UUID
+    permissions: List[BugoutJournalPermission] = Field(default_factory=list)
+
+
 class BugoutScope(BaseModel):
     api: str
     scope: str
