@@ -40,7 +40,7 @@ setup(
     zip_safe=False,
     install_requires=["pydantic>=1.6", "requests"],
     extras_require={
-        "dev": ["black", "mypy"],
+        "dev": ["black", "mypy", "types-requests"],
         "distribute": ["setuptools", "twine", "wheel"],
     },
     entry_points={
