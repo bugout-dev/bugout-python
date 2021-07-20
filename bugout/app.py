@@ -6,6 +6,7 @@ from .calls import ping
 from .group import Group
 from .humbug import Humbug
 from .journal import Journal
+from .resource import Resource
 from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
 
@@ -29,6 +30,7 @@ class Bugout:
         self.group = Group(self.brood_api_url)
         self.humbug = Humbug(self.spire_api_url)
         self.journal = Journal(self.spire_api_url)
+        self.resource = Resource(self.brood_api_url)
 
     @property
     def brood_url(self):
@@ -292,6 +294,87 @@ class Bugout:
     ) -> data.BugoutGroup:
         self.group.timeout = timeout
         return self.group.delete_group(token=token, group_id=group_id)
+
+    # Application handlers
+    def create_application(
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        description: str,
+        group_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutApplication:
+        self.group.timeout = timeout
+        return self.group.create_application(
+            token=token, name=name, description=description, group_id=group_id
+        )
+
+    def get_application(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutApplication:
+        self.group.timeout = timeout
+        return self.group.get_application(token=token, application_id=application_id)
+
+    def list_applications(
+        self,
+        token: Union[str, uuid.UUID],
+        group_id: Optional[Union[str, uuid.UUID]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutApplications:
+        self.group.timeout = timeout
+        return self.group.list_applications(token=token, group_id=group_id)
+
+    def delete_application(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutApplication:
+        self.group.timeout = timeout
+        return self.group.delete_application(token=token, application_id=application_id)
+
+    # Resource handlers
+    def create_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
+        resource_data: Dict[str, Any],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResource:
+        self.resource.timeout = timeout
+        return self.resource.create_resource(
+            token=token, application_id=application_id, resource_data=resource_data
+        )
+
+    def get_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResource:
+        self.resource.timeout = timeout
+        return self.resource.get_resource(token=token, resource_id=resource_id)
+
+    def list_resources(
+        self,
+        token: Union[str, uuid.UUID],
+        params: Optional[Dict[str, Any]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResources:
+        self.resource.timeout = timeout
+        return self.resource.list_resources(token=token, params=params)
+
+    def delete_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResource:
+        self.resource.timeout = timeout
+        return self.resource.delete_resource(token=token, resource_id=resource_id)
 
     # Journal scopes handlers
     def list_scopes(

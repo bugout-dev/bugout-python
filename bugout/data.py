@@ -97,6 +97,29 @@ class BugoutGroupMembers(BaseModel):
     users: List[BugoutUserShort]
 
 
+class BugoutApplication(BaseModel):
+    id: uuid.UUID
+    name: str
+    description: Optional[str] = None
+    group_id: uuid.UUID
+
+
+class BugoutApplications(BaseModel):
+    applications: List[BugoutApplication]
+
+
+class BugoutResource(BaseModel):
+    id: uuid.UUID
+    application_id: str
+    resource_data: Dict[str, Any]
+    created_at: datetime
+    updated_at: datetime
+
+
+class BugoutResources(BaseModel):
+    resources: List[BugoutResource]
+
+
 class BugoutJournalPermission(BaseModel):
     holder_type: HolderType
     holder_id: str

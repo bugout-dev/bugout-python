@@ -9,6 +9,8 @@ from .data import (
     BugoutGroupUser,
     BugoutGroupMembers,
     BugoutUserGroups,
+    BugoutApplication,
+    BugoutApplications,
 )
 from .settings import REQUESTS_TIMEOUT
 
@@ -194,3 +196,70 @@ class Group:
             method=Method.delete, path=delete_group_path, headers=headers
         )
         return BugoutGroup(**result)
+
+    def create_application(
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        description: str,
+        group_id: Union[str, uuid.UUID],
+    ) -> BugoutApplication:
+        applications_path = "applications"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        data = {
+            "name": name,
+            "description": description,
+            "group_id": group_id,
+        }
+        result = self._call(
+            method=Method.post, path=applications_path, headers=headers, data=data
+        )
+        return BugoutApplication(**result)
+
+    def get_application(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
+    ) -> BugoutApplication:
+        applications_path = f"applications/{application_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=applications_path, headers=headers)
+        return BugoutApplication(**result)
+
+    def list_applications(
+        self,
+        token: Union[str, uuid.UUID],
+        group_id: Optional[Union[str, uuid.UUID]] = None,
+    ) -> BugoutApplications:
+        applications_path = "applications"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        query_params = {
+            "group_id": group_id,
+        }
+        result = self._call(
+            method=Method.get,
+            path=applications_path,
+            params=query_params,
+            headers=headers,
+        )
+        return BugoutApplications(**result)
+
+    def delete_application(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
+    ) -> BugoutApplication:
+        applications_path = f"applications/{application_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.delete, path=applications_path, headers=headers
+        )
+        return BugoutApplication(**result)
