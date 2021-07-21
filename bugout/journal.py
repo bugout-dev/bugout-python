@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, List, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec
+from .calls import make_request
 from .data import (
     BugoutJournal,
     BugoutJournals,
@@ -18,6 +18,7 @@ from .data import (
     Method,
     JournalTypes,
 )
+from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
 

@@ -1,16 +1,10 @@
 from typing import Any, Dict, List, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec
+from .calls import make_request
 from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
+from .exceptions import InvalidUrlSpec, TokenInvalidParameters
 from .settings import REQUESTS_TIMEOUT
-
-
-class TokenInvalidParameters(ValueError):
-    """
-    Raised when operations are applied to a token but invalid parameters are provided with which to
-    specify that token.
-    """
 
 
 class User:
@@ -162,11 +156,17 @@ class User:
         return BugoutUser(**result)
 
     # Token module
-    def create_token(self, username: str, password: str) -> BugoutToken:
+    def create_token(
+        self,
+        username: str,
+        password: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
+    ) -> BugoutToken:
         create_token_path = "token"
         data = {
             "username": username,
             "password": password,
+            "application_id": application_id,
         }
         result = self._call(method=Method.post, path=create_token_path, data=data)
         return BugoutToken(**result)

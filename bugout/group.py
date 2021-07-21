@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec
+from .calls import make_request
 from .data import (
     Method,
     Role,
@@ -12,13 +12,8 @@ from .data import (
     BugoutApplication,
     BugoutApplications,
 )
+from .exceptions import InvalidUrlSpec, GroupInvalidParameters
 from .settings import REQUESTS_TIMEOUT
-
-
-class GroupInvalidParameters(ValueError):
-    """
-    Raised when operations are applied to a group but invalid parameters are provided.
-    """
 
 
 class Group:

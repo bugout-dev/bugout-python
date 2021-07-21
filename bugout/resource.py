@@ -1,15 +1,10 @@
 from typing import Any, Dict, Optional, Union
 import uuid
 
-from .calls import make_request, InvalidUrlSpec
+from .calls import make_request
 from .data import Method, BugoutResource, BugoutResources
+from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
-
-
-class ResourceInvalidParameters(ValueError):
-    """
-    Raised when operations are applied to a resource but invalid parameters are provided.
-    """
 
 
 class Resource:
