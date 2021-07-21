@@ -37,6 +37,7 @@ class User:
         username: str,
         email: str,
         password: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         **kwargs: Dict[str, Any],
     ) -> BugoutUser:
         create_user_path = "user"
@@ -44,6 +45,7 @@ class User:
             "username": username,
             "email": email,
             "password": password,
+            "application_id": application_id,
         }
         headers = {}
         if "headers" in kwargs.keys():

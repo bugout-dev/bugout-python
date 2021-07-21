@@ -52,12 +52,17 @@ class Bugout:
         username: str,
         email: str,
         password: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
         return self.user.create_user(
-            username=username, email=email, password=password, **kwargs
+            username=username,
+            email=email,
+            password=password,
+            application_id=application_id,
+            **kwargs,
         )
 
     def get_user(
@@ -361,11 +366,14 @@ class Bugout:
     def list_resources(
         self,
         token: Union[str, uuid.UUID],
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         params: Optional[Dict[str, Any]] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutResources:
         self.resource.timeout = timeout
-        return self.resource.list_resources(token=token, params=params)
+        return self.resource.list_resources(
+            token=token, application_id=application_id, params=params
+        )
 
     def delete_resource(
         self,
