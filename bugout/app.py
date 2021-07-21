@@ -11,12 +11,6 @@ from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
 
 
-class InvalidParameters(ValueError):
-    """
-    Raised when provided invalid parameters.
-    """
-
-
 class Bugout:
     def __init__(
         self,
@@ -52,12 +46,17 @@ class Bugout:
         username: str,
         email: str,
         password: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
         return self.user.create_user(
-            username=username, email=email, password=password, **kwargs
+            username=username,
+            email=email,
+            password=password,
+            application_id=application_id,
+            **kwargs,
         )
 
     def get_user(
@@ -136,10 +135,16 @@ class Bugout:
 
     # Token handlers
     def create_token(
-        self, username: str, password: str, timeout: float = REQUESTS_TIMEOUT
+        self,
+        username: str,
+        password: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutToken:
         self.user.timeout = timeout
-        return self.user.create_token(username=username, password=password)
+        return self.user.create_token(
+            username=username, password=password, application_id=application_id
+        )
 
     def create_token_restricted(
         self,

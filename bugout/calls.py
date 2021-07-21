@@ -3,18 +3,7 @@ from typing import Any, Dict
 import requests
 
 from .data import Method
-
-
-class InvalidUrlSpec(ValueError):
-    """
-    Raised when an invalid url is specified.
-    """
-
-
-class BugoutUnexpectedResponse(Exception):
-    """
-    Raised when Bugout server response is unexpected (e.g. unparseable).
-    """
+from .exceptions import BugoutResponseException, BugoutUnexpectedResponse
 
 
 def make_request(method: Method, url: str, **kwargs) -> Any:
@@ -23,8 +12,17 @@ def make_request(method: Method, url: str, **kwargs) -> Any:
         r = requests.request(method.value, url=url, **kwargs)
         r.raise_for_status()
         response_body = r.json()
+    except requests.exceptions.RequestException as e:
+        exception_detail = r.json()
+        raise BugoutResponseException(
+            "An exception occurred at Bugout API side",
+            status_code=r.status_code,
+            detail=exception_detail["detail"]
+            if exception_detail["detail"] is not None
+            else None,
+        )
     except Exception as e:
-        raise BugoutUnexpectedResponse(f"Exception {str(e)}")
+        raise BugoutUnexpectedResponse(f"{str(e)}")
     return response_body
 
 
