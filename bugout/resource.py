@@ -69,7 +69,7 @@ class Resource:
         resources_path = "resources"
         headers = {
             "Authorization": f"Bearer {token}",
-        })
+        }
         result = self._call(
             method=Method.get, path=resources_path, params=params, headers=headers
         )
