@@ -366,13 +366,12 @@ class Bugout:
     def list_resources(
         self,
         token: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         params: Optional[Dict[str, Any]] = None,
         timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutResources:
         self.resource.timeout = timeout
         return self.resource.list_resources(
-            token=token, application_id=application_id, params=params
+            token=token, params=params
         )
 
     def delete_resource(

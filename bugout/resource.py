@@ -64,15 +64,12 @@ class Resource:
     def list_resources(
         self,
         token: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         params: Optional[Dict[str, Any]] = None,
     ) -> BugoutResources:
         resources_path = "resources"
         headers = {
             "Authorization": f"Bearer {token}",
-        }
-        if application_id is not None:
-            params["application_id"] = application_id
+        })
         result = self._call(
             method=Method.get, path=resources_path, params=params, headers=headers
         )
