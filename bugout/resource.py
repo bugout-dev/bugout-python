@@ -21,7 +21,7 @@ class Resource:
         self.timeout = timeout
 
     def _call(self, method: Method, path: str, **kwargs):
-        url = f"{self.url.rstrip('/')}/{path.rstrip('/')}"
+        url = f"{self.url.rstrip('/')}/{path}"
         result = make_request(method=method, url=url, timeout=self.timeout, **kwargs)
         return result
 
@@ -31,7 +31,7 @@ class Resource:
         application_id: Union[str, uuid.UUID],
         resource_data: Dict[str, Any],
     ) -> BugoutResource:
-        resources_path = "resources"
+        resources_path = "resources/"
         headers = {
             "Authorization": f"Bearer {token}",
         }
@@ -61,7 +61,7 @@ class Resource:
         token: Union[str, uuid.UUID],
         params: Optional[Dict[str, Any]] = None,
     ) -> BugoutResources:
-        resources_path = "resources"
+        resources_path = "resources/"
         headers = {
             "Authorization": f"Bearer {token}",
         }
