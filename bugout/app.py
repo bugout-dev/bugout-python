@@ -147,9 +147,7 @@ class Bugout:
         )
 
     def create_token_restricted(
-        self,
-        token: Union[str, uuid.UUID],
-        timeout: float = REQUESTS_TIMEOUT,
+        self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutToken:
         self.user.timeout = timeout
         return self.user.create_token_restricted(token=token)
@@ -372,6 +370,18 @@ class Bugout:
         self.resource.timeout = timeout
         return self.resource.list_resources(token=token, params=params)
 
+    def update_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        resource_data: Dict[str, Any],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResource:
+        self.resource.timeout = timeout
+        return self.resource.update_resource(
+            token=token, resource_id=resource_id, resource_data_update=resource_data
+        )
+
     def delete_resource(
         self,
         token: Union[str, uuid.UUID],
@@ -533,9 +543,7 @@ class Bugout:
             entries=[data.BugoutJournalEntryRequest(**entry) for entry in entries]
         )
         return self.journal.create_entries_pack(
-            token=token,
-            journal_id=journal_id,
-            entries=entries_obj,
+            token=token, journal_id=journal_id, entries=entries_obj,
         )
 
     def get_entry(
@@ -681,9 +689,7 @@ class Bugout:
 
     # Public
     def check_journal_public(
-        self,
-        journal_id: Union[str, uuid.UUID],
-        timeout: float = REQUESTS_TIMEOUT,
+        self, journal_id: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT,
     ) -> bool:
         self.journal.timeout = timeout
         return self.journal.check_journal_public(journal_id=journal_id)
