@@ -19,7 +19,10 @@ class BugoutResponseException(Exception):
     """
 
     def __init__(
-        self, message, status_code: int, detail: Optional[Any] = None,
+        self,
+        message,
+        status_code: int,
+        detail: Optional[Any] = None,
     ) -> None:
         super().__init__(message)
         self.status_code = status_code

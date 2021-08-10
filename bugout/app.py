@@ -147,7 +147,9 @@ class Bugout:
         )
 
     def create_token_restricted(
-        self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT,
+        self,
+        token: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> data.BugoutToken:
         self.user.timeout = timeout
         return self.user.create_token_restricted(token=token)
@@ -543,7 +545,9 @@ class Bugout:
             entries=[data.BugoutJournalEntryRequest(**entry) for entry in entries]
         )
         return self.journal.create_entries_pack(
-            token=token, journal_id=journal_id, entries=entries_obj,
+            token=token,
+            journal_id=journal_id,
+            entries=entries_obj,
         )
 
     def get_entry(
@@ -689,7 +693,9 @@ class Bugout:
 
     # Public
     def check_journal_public(
-        self, journal_id: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT,
+        self,
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> bool:
         self.journal.timeout = timeout
         return self.journal.check_journal_public(journal_id=journal_id)

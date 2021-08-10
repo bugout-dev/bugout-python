@@ -45,7 +45,9 @@ class Resource:
         return BugoutResource(**result)
 
     def get_resource(
-        self, token: Union[str, uuid.UUID], resource_id: Union[str, uuid.UUID],
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
     ) -> BugoutResource:
         resources_path = f"resources/{resource_id}"
         headers = {
@@ -55,7 +57,9 @@ class Resource:
         return BugoutResource(**result)
 
     def list_resources(
-        self, token: Union[str, uuid.UUID], params: Optional[Dict[str, Any]] = None,
+        self,
+        token: Union[str, uuid.UUID],
+        params: Optional[Dict[str, Any]] = None,
     ) -> BugoutResources:
         resources_path = "resources/"
         headers = {
@@ -85,7 +89,9 @@ class Resource:
         return BugoutResource(**result)
 
     def delete_resource(
-        self, token: Union[str, uuid.UUID], resource_id: Union[str, uuid.UUID],
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
     ) -> BugoutResource:
         resources_path = f"resources/{resource_id}"
         headers = {

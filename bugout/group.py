@@ -45,7 +45,9 @@ class Group:
         return BugoutGroup(**result)
 
     def find_group(
-        self, token: Union[str, uuid.UUID], group_id: Union[str, uuid.UUID],
+        self,
+        token: Union[str, uuid.UUID],
+        group_id: Union[str, uuid.UUID],
     ) -> BugoutGroup:
         find_group_path = f"groups/find"
         query_params = {"group_id": group_id}
@@ -212,7 +214,9 @@ class Group:
         return BugoutApplication(**result)
 
     def get_application(
-        self, token: Union[str, uuid.UUID], application_id: Union[str, uuid.UUID],
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
     ) -> BugoutApplication:
         applications_path = f"applications/{application_id}"
         headers = {
@@ -242,7 +246,9 @@ class Group:
         return BugoutApplications(**result)
 
     def delete_application(
-        self, token: Union[str, uuid.UUID], application_id: Union[str, uuid.UUID],
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Union[str, uuid.UUID],
     ) -> BugoutApplication:
         applications_path = f"applications/{application_id}"
         headers = {

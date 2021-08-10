@@ -135,7 +135,10 @@ class Journal:
 
     # Journal module
     def create_journal(
-        self, token: Union[str, uuid.UUID], name: str, journal_type: JournalTypes,
+        self,
+        token: Union[str, uuid.UUID],
+        name: str,
+        journal_type: JournalTypes,
     ) -> BugoutJournal:
         journal_path = "journals/"
         json = {"name": name, "journal_type": journal_type.value}
@@ -302,7 +305,10 @@ class Journal:
             "Authorization": f"Bearer {token}",
         }
         result = self._call(
-            method=Method.put, path=entry_id_content_path, headers=headers, json=json,
+            method=Method.put,
+            path=entry_id_content_path,
+            headers=headers,
+            json=json,
         )
         return BugoutJournalEntryContent(**result)
 
