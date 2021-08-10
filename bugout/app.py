@@ -372,6 +372,18 @@ class Bugout:
         self.resource.timeout = timeout
         return self.resource.list_resources(token=token, params=params)
 
+    def update_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        resource_data: Dict[str, Any],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResource:
+        self.resource.timeout = timeout
+        return self.resource.update_resource(
+            token=token, resource_id=resource_id, resource_data_update=resource_data
+        )
+
     def delete_resource(
         self,
         token: Union[str, uuid.UUID],

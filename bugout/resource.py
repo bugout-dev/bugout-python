@@ -70,6 +70,24 @@ class Resource:
         )
         return BugoutResources(**result)
 
+    def update_resource(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        resource_data_update: Dict[str, Any],
+    ) -> BugoutResource:
+        resources_path = f"resources/{resource_id}"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.put,
+            path=resources_path,
+            headers=headers,
+            json=resource_data_update,
+        )
+        return BugoutResource(**result)
+
     def delete_resource(
         self,
         token: Union[str, uuid.UUID],
