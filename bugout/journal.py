@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, List, Optional, Union
 import uuid
 
@@ -20,6 +21,11 @@ from .data import (
 )
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
+
+
+class SearchOrder(Enum):
+    ASCENDING = "asc"
+    DESCENDING = "desc"
 
 
 class Journal:
@@ -410,6 +416,7 @@ class Journal:
         limit: int = 10,
         offset: int = 0,
         content: bool = True,
+        order: SearchOrder = SearchOrder.DESCENDING,
     ) -> BugoutSearchResults:
         search_path = f"journals/{journal_id}/search"
         headers = {
@@ -421,6 +428,7 @@ class Journal:
             "limit": limit,
             "offset": offset,
             "content": content,
+            "order": order.value,
         }
         result = self._call(
             method=Method.get, path=search_path, params=query_params, headers=headers
