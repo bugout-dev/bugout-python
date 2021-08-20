@@ -5,7 +5,7 @@ from . import data
 from .calls import ping
 from .group import Group
 from .humbug import Humbug
-from .journal import Journal
+from .journal import Journal, SearchOrder
 from .resource import Resource
 from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
@@ -685,10 +685,11 @@ class Bugout:
         offset: int = 0,
         content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
+        order: SearchOrder = SearchOrder.DESCENDING,
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
         return self.journal.search(
-            token, journal_id, query, filters, limit, offset, content
+            token, journal_id, query, filters, limit, offset, content, order=order
         )
 
     # Public
