@@ -7,7 +7,7 @@ __description__ = "Python client library for Bugout API"
 
 __email__ = "engineering@bugout.dev"
 __license__ = "MIT"
-__version__ = "0.1.17"
+__version__ = "0.1.18"
 
 __all__ = (
     "__author__",

@@ -161,12 +161,14 @@ class User:
         username: str,
         password: str,
         application_id: Optional[Union[str, uuid.UUID]] = None,
+        token_note: Optional[str] = None,
     ) -> BugoutToken:
         create_token_path = "token"
         data = {
             "username": username,
             "password": password,
             "application_id": application_id,
+            "token_note": token_note,
         }
         result = self._call(method=Method.post, path=create_token_path, data=data)
         return BugoutToken(**result)
