@@ -321,7 +321,7 @@ class Journal:
     ) -> BugoutJournalEntryContent:
         entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
         params: Dict[str, str] = {}
-        json = {
+        json: Dict[str, Any] = {
             "title": title,
             "content": content,
         }
