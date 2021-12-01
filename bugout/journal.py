@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 import uuid
 
 from .calls import make_request
@@ -26,6 +26,21 @@ from .settings import REQUESTS_TIMEOUT
 class SearchOrder(Enum):
     ASCENDING = "asc"
     DESCENDING = "desc"
+
+
+class TagsAction(Enum):
+    """
+    tags_action query parameter for PUT /{journal_id}/entries/{entry_id} requests.
+    See Spire API implementation of that endpoint for more details:
+    https://github.com/bugout-dev/spire/blob/cc748d45d0aa7e3350105810449ff4c14fa64ec9/spire/journal/api.py#L1249
+
+    Corresponds to EntryUpdateTagActions enum in Spire:
+    https://github.com/bugout-dev/spire/blob/cc748d45d0aa7e3350105810449ff4c14fa64ec9/spire/journal/data.py#L32
+    """
+
+    ignore = "ignore"
+    replace = "replace"
+    merge = "merge"
 
 
 class Journal:
@@ -301,12 +316,18 @@ class Journal:
         entry_id: Union[str, uuid.UUID],
         title: str,
         content: str,
+        tags: Optional[List[str]] = None,
+        tags_action: TagsAction = TagsAction.merge,
     ) -> BugoutJournalEntryContent:
         entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
-        json = {
+        params: Dict[str, str] = {}
+        json: Dict[str, Any] = {
             "title": title,
             "content": content,
         }
+        if tags is not None:
+            json["tags"] = tags
+            params["tags_action"] = tags_action.value
         headers = {
             "Authorization": f"Bearer {token}",
         }
@@ -315,6 +336,7 @@ class Journal:
             path=entry_id_content_path,
             headers=headers,
             json=json,
+            params=params,
         )
         return BugoutJournalEntryContent(**result)
 
