@@ -5,7 +5,7 @@ from . import data
 from .calls import ping
 from .group import Group
 from .humbug import Humbug
-from .journal import Journal, SearchOrder
+from .journal import Journal, SearchOrder, TagsAction
 from .resource import Resource
 from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
@@ -595,6 +595,8 @@ class Bugout:
         title: str,
         content: str,
         timeout: float = REQUESTS_TIMEOUT,
+        tags: Optional[List[str]] = None,
+        tags_action: TagsAction = TagsAction.merge,
     ) -> data.BugoutJournalEntryContent:
         self.journal.timeout = timeout
         return self.journal.update_entry_content(
@@ -603,6 +605,8 @@ class Bugout:
             entry_id=entry_id,
             title=title,
             content=content,
+            tags=tags,
+            tags_action=tags_action,
         )
 
     def delete_entry(
