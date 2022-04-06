@@ -21,7 +21,7 @@ class BugoutResponseException(Exception):
     def __init__(
         self,
         message,
-        status_code: int,
+        status_code: Optional[int] = None,
         detail: Optional[Any] = None,
     ) -> None:
         super().__init__(message)
