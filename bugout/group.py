@@ -2,9 +2,16 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 from .calls import make_request
-from .data import (BugoutApplication, BugoutApplications, BugoutGroup,
-                   BugoutGroupMembers, BugoutGroupUser, BugoutUserGroups,
-                   Method, Role)
+from .data import (
+    BugoutApplication,
+    BugoutApplications,
+    BugoutGroup,
+    BugoutGroupMembers,
+    BugoutGroupUser,
+    BugoutUserGroups,
+    Method,
+    Role,
+)
 from .exceptions import GroupInvalidParameters, InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 

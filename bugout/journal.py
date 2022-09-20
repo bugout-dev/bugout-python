@@ -3,12 +3,22 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import (BugoutJournal, BugoutJournalEntries,
-                   BugoutJournalEntriesRequest, BugoutJournalEntry,
-                   BugoutJournalEntryContent, BugoutJournalEntryTags,
-                   BugoutJournalPermissions, BugoutJournals,
-                   BugoutJournalScopeSpecs, BugoutScopes, BugoutSearchResults,
-                   HolderType, JournalTypes, Method)
+from .data import (
+    BugoutJournal,
+    BugoutJournalEntries,
+    BugoutJournalEntriesRequest,
+    BugoutJournalEntry,
+    BugoutJournalEntryContent,
+    BugoutJournalEntryTags,
+    BugoutJournalPermissions,
+    BugoutJournals,
+    BugoutJournalScopeSpecs,
+    BugoutScopes,
+    BugoutSearchResults,
+    HolderType,
+    JournalTypes,
+    Method,
+)
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
