@@ -1,8 +1,8 @@
-from typing import Any, Dict, List, Optional, Union
 import uuid
+from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
+from .data import BugoutToken, BugoutUser, BugoutUserTokens, Method, TokenType
 from .exceptions import InvalidUrlSpec, TokenInvalidParameters
 from .settings import REQUESTS_TIMEOUT
 
@@ -28,9 +28,10 @@ class User:
     # User module
     def create_user(
         self,
-        username: str,
-        email: str,
-        password: str,
+        username: Optional[str] = None,
+        email: Optional[str] = None,
+        password: Optional[str] = None,
+        signature: Optional[str] = None,
         application_id: Optional[Union[str, uuid.UUID]] = None,
         **kwargs: Dict[str, Any],
     ) -> BugoutUser:
@@ -39,6 +40,7 @@ class User:
             "username": username,
             "email": email,
             "password": password,
+            "signature": signature,
             "application_id": application_id,
         }
         headers = {}

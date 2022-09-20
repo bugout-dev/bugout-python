@@ -1,5 +1,5 @@
-from typing import Any, Dict, List, Optional, Union
 import uuid
+from typing import Any, Dict, List, Optional, Union
 
 from . import data
 from .calls import ping
@@ -7,8 +7,8 @@ from .group import Group
 from .humbug import Humbug
 from .journal import Journal, SearchOrder, TagsAction
 from .resource import Resource
-from .user import User
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
+from .user import User
 
 
 class Bugout:
@@ -43,9 +43,10 @@ class Bugout:
     # User handlers
     def create_user(
         self,
-        username: str,
-        email: str,
-        password: str,
+        username: Optional[str] = None,
+        email: Optional[str] = None,
+        password: Optional[str] = None,
+        signature: Optional[str] = None,
         application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
@@ -55,6 +56,7 @@ class Bugout:
             username=username,
             email=email,
             password=password,
+            signature=signature,
             application_id=application_id,
             **kwargs,
         )

@@ -1,8 +1,8 @@
-from typing import Any, Dict, Optional, Union
 import uuid
+from typing import Any, Dict, Optional, Union
 
 from .calls import make_request
-from .data import Method, BugoutResource, BugoutResources
+from .data import BugoutResource, BugoutResources, Method
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 

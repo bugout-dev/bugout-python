@@ -1,7 +1,7 @@
+import uuid
 from datetime import datetime
 from enum import Enum, unique
 from typing import Any, Dict, List, Optional, Set
-import uuid
 
 from pydantic import BaseModel, Field
 
