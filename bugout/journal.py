@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
 from .data import (
+    AuthType,
     BugoutJournal,
     BugoutJournalEntries,
     BugoutJournalEntriesRequest,
@@ -160,44 +161,54 @@ class Journal:
         token: Union[str, uuid.UUID],
         name: str,
         journal_type: JournalTypes,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournal:
         journal_path = "journals/"
         json = {"name": name, "journal_type": journal_type.value}
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.post, path=journal_path, headers=headers, json=json
         )
         return BugoutJournal(**result)
 
-    def list_journals(self, token: Union[str, uuid.UUID]) -> BugoutJournals:
+    def list_journals(
+        self, token: Union[str, uuid.UUID], auth_type: AuthType = AuthType.bearer
+    ) -> BugoutJournals:
         journal_path = "journals/"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=journal_path, headers=headers)
         return BugoutJournals(**result)
 
     def get_journal(
-        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=journal_id_path, headers=headers)
         return BugoutJournal(**result)
 
     def update_journal(
-        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID], name: str
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        name: str,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         json = {
             "name": name,
         }
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.put, path=journal_id_path, headers=headers, json=json
@@ -205,11 +216,14 @@ class Journal:
         return BugoutJournal(**result)
 
     def delete_journal(
-        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournal:
         journal_id_path = f"journals/{journal_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.delete, path=journal_id_path, headers=headers)
         return BugoutJournal(**result)
@@ -225,6 +239,7 @@ class Journal:
         context_url: Optional[str] = None,
         context_id: Optional[str] = None,
         context_type: Optional[str] = None,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntry:
         entry_path = f"journals/{journal_id}/entries"
         json = {
@@ -236,7 +251,7 @@ class Journal:
             "context_type": context_type,
         }
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.post, path=entry_path, headers=headers, json=json
@@ -248,10 +263,11 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         entries: BugoutJournalEntriesRequest,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntries:
         entry_path = f"journals/{journal_id}/bulk"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         json = {
             "entries": [
@@ -276,20 +292,24 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntry:
         entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=entry_id_path, headers=headers)
         return BugoutJournalEntry(**result)
 
     def get_entries(
-        self, token: Union[str, uuid.UUID], journal_id: Union[str, uuid.UUID]
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntries:
         entry_path = f"journals/{journal_id}/entries"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=entry_path, headers=headers)
         return BugoutJournalEntries(**result)
@@ -299,10 +319,11 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntryContent:
         entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.get, path=entry_id_content_path, headers=headers
@@ -318,6 +339,7 @@ class Journal:
         content: str,
         tags: Optional[List[str]] = None,
         tags_action: TagsAction = TagsAction.merge,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntryContent:
         entry_id_content_path = f"journals/{journal_id}/entries/{entry_id}/content"
         params: Dict[str, str] = {}
@@ -329,7 +351,7 @@ class Journal:
             json["tags"] = tags
             params["tags_action"] = tags_action.value
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.put,
@@ -345,10 +367,11 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntry:
         entry_id_path = f"journals/{journal_id}/entries/{entry_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.delete, path=entry_id_path, headers=headers)
         return BugoutJournalEntry(**result)
@@ -370,11 +393,12 @@ class Journal:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         tags: List[str],
+        auth_type: AuthType = AuthType.bearer,
     ) -> List[Any]:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
         json = {"tags": tags}
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.post, path=tags_path, headers=headers, json=json
@@ -386,10 +410,11 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntryTags:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=tags_path, headers=headers)
         return BugoutJournalEntryTags(**result)
@@ -400,11 +425,12 @@ class Journal:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         tags: List[str],
+        auth_type: AuthType = AuthType.bearer,
     ) -> List[Any]:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
         json = {"tags": tags}
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.put, path=tags_path, headers=headers, json=json
@@ -417,11 +443,12 @@ class Journal:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         tag: str,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutJournalEntryTags:
         tags_path = f"journals/{journal_id}/entries/{entry_id}/tags"
         json = {"tag": tag}
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.delete, path=tags_path, headers=headers, json=json
@@ -439,10 +466,11 @@ class Journal:
         offset: int = 0,
         content: bool = True,
         order: SearchOrder = SearchOrder.DESCENDING,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutSearchResults:
         search_path = f"journals/{journal_id}/search"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         query_params = {
             "q": query,

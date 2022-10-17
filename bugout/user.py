@@ -2,7 +2,7 @@ import uuid
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import BugoutToken, BugoutUser, BugoutUserTokens, Method, TokenType
+from .data import AuthType, BugoutToken, BugoutUser, BugoutUserTokens, Method, TokenType
 from .exceptions import InvalidUrlSpec, TokenInvalidParameters
 from .settings import REQUESTS_TIMEOUT
 
@@ -51,20 +51,25 @@ class User:
         )
         return BugoutUser(**result)
 
-    def get_user(self, token: Union[str, uuid.UUID]) -> BugoutUser:
+    def get_user(
+        self, token: Union[str, uuid.UUID], auth_type: AuthType = AuthType.bearer
+    ) -> BugoutUser:
         get_user_path = "user"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(method=Method.get, path=get_user_path, headers=headers)
         return BugoutUser(**result)
 
     def get_user_by_id(
-        self, token: Union[str, uuid.UUID], user_id: Union[str, uuid.UUID]
+        self,
+        token: Union[str, uuid.UUID],
+        user_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutUser:
         get_user_by_id_path = f"user/{user_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
         result = self._call(
             method=Method.get, path=get_user_by_id_path, headers=headers

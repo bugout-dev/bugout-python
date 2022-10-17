@@ -62,19 +62,25 @@ class Bugout:
         )
 
     def get_user(
-        self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
+        self,
+        token: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutUser:
         self.user.timeout = timeout
-        return self.user.get_user(token=token)
+        return self.user.get_user(token=token, auth_type=data.AuthType[auth_type])
 
     def get_user_by_id(
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutUser:
         self.user.timeout = timeout
-        return self.user.get_user_by_id(token=token, user_id=user_id)
+        return self.user.get_user_by_id(
+            token=token, user_id=user_id, auth_type=data.AuthType[auth_type]
+        )
 
     def find_user(
         self,
@@ -470,28 +476,40 @@ class Bugout:
         name: str,
         journal_type: Optional[Union[str, data.JournalTypes]] = None,
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         if journal_type is None:
             journal_type = data.JournalTypes.DEFAULT
         return self.journal.create_journal(
-            token=token, name=name, journal_type=data.JournalTypes(journal_type)
+            token=token,
+            name=name,
+            journal_type=data.JournalTypes(journal_type),
+            auth_type=data.AuthType[auth_type],
         )
 
     def list_journals(
-        self, token: Union[str, uuid.UUID], timeout: float = REQUESTS_TIMEOUT
+        self,
+        token: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournals:
         self.journal.timeout = timeout
-        return self.journal.list_journals(token=token)
+        return self.journal.list_journals(
+            token=token, auth_type=data.AuthType[auth_type]
+        )
 
     def get_journal(
         self,
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
-        return self.journal.get_journal(token=token, journal_id=journal_id)
+        return self.journal.get_journal(
+            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+        )
 
     def update_journal(
         self,
@@ -499,10 +517,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         name: str,
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         return self.journal.update_journal(
-            token=token, journal_id=journal_id, name=name
+            token=token,
+            journal_id=journal_id,
+            name=name,
+            auth_type=data.AuthType[auth_type],
         )
 
     def delete_journal(
@@ -510,9 +532,12 @@ class Bugout:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
-        return self.journal.delete_journal(token=token, journal_id=journal_id)
+        return self.journal.delete_journal(
+            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+        )
 
     # Journal entries
     def create_entry(
@@ -526,6 +551,7 @@ class Bugout:
         context_id: Optional[str] = None,
         context_type: Optional[str] = None,
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.create_entry(
@@ -537,6 +563,7 @@ class Bugout:
             context_url=context_url,
             context_id=context_id,
             context_type=context_type,
+            auth_type=data.AuthType[auth_type],
         )
 
     def create_entries_pack(
@@ -545,6 +572,7 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         entries: List[Dict[str, Any]],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntries:
         self.journal.timeout = timeout
         entries_obj = data.BugoutJournalEntriesRequest(
@@ -554,6 +582,7 @@ class Bugout:
             token=token,
             journal_id=journal_id,
             entries=entries_obj,
+            auth_type=data.AuthType[auth_type],
         )
 
     def get_entry(
@@ -562,10 +591,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.get_entry(
-            token=token, journal_id=journal_id, entry_id=entry_id
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            auth_type=data.AuthType[auth_type],
         )
 
     def get_entries(
@@ -573,9 +606,12 @@ class Bugout:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntries:
         self.journal.timeout = timeout
-        return self.journal.get_entries(token=token, journal_id=journal_id)
+        return self.journal.get_entries(
+            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+        )
 
     def get_entry_content(
         self,
@@ -583,10 +619,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntryContent:
         self.journal.timeout = timeout
         return self.journal.get_entry_content(
-            token=token, journal_id=journal_id, entry_id=entry_id
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            auth_type=data.AuthType[auth_type],
         )
 
     def update_entry_content(
@@ -599,6 +639,7 @@ class Bugout:
         timeout: float = REQUESTS_TIMEOUT,
         tags: Optional[List[str]] = None,
         tags_action: TagsAction = TagsAction.merge,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntryContent:
         self.journal.timeout = timeout
         return self.journal.update_entry_content(
@@ -609,6 +650,7 @@ class Bugout:
             content=content,
             tags=tags,
             tags_action=tags_action,
+            auth_type=data.AuthType[auth_type],
         )
 
     def delete_entry(
@@ -617,10 +659,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.delete_entry(
-            token=token, journal_id=journal_id, entry_id=entry_id
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            auth_type=data.AuthType[auth_type],
         )
 
     # Tags
@@ -640,10 +686,15 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         tags: List[str],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> List[Any]:
         self.journal.timeout = timeout
         return self.journal.create_tags(
-            token=token, journal_id=journal_id, entry_id=entry_id, tags=tags
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            tags=tags,
+            auth_type=data.AuthType[auth_type],
         )
 
     def get_tags(
@@ -652,10 +703,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntryTags:
         self.journal.timeout = timeout
         return self.journal.get_tags(
-            token=token, journal_id=journal_id, entry_id=entry_id
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            auth_type=data.AuthType[auth_type],
         )
 
     def update_tags(
@@ -665,10 +720,15 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         tags: List[str],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> List[Any]:
         self.journal.timeout = timeout
         return self.journal.update_tags(
-            token=token, journal_id=journal_id, entry_id=entry_id, tags=tags
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            tags=tags,
+            auth_type=data.AuthType[auth_type],
         )
 
     def delete_tag(
@@ -678,10 +738,15 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         tag: str,
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutJournalEntryTags:
         self.journal.timeout = timeout
         return self.journal.delete_tag(
-            token=token, journal_id=journal_id, entry_id=entry_id, tag=tag
+            token=token,
+            journal_id=journal_id,
+            entry_id=entry_id,
+            tag=tag,
+            auth_type=data.AuthType[auth_type],
         )
 
     # Search
@@ -696,10 +761,19 @@ class Bugout:
         content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
         order: SearchOrder = SearchOrder.DESCENDING,
+        auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
         return self.journal.search(
-            token, journal_id, query, filters, limit, offset, content, order=order
+            token,
+            journal_id,
+            query,
+            filters,
+            limit,
+            offset,
+            content,
+            order=order,
+            auth_type=data.AuthType[auth_type],
         )
 
     # Public
