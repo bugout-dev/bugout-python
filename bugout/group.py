@@ -1,18 +1,18 @@
-from typing import Any, Dict, Optional, Union
 import uuid
+from typing import Any, Dict, Optional, Union
 
 from .calls import make_request
 from .data import (
-    Method,
-    Role,
-    BugoutGroup,
-    BugoutGroupUser,
-    BugoutGroupMembers,
-    BugoutUserGroups,
     BugoutApplication,
     BugoutApplications,
+    BugoutGroup,
+    BugoutGroupMembers,
+    BugoutGroupUser,
+    BugoutUserGroups,
+    Method,
+    Role,
 )
-from .exceptions import InvalidUrlSpec, GroupInvalidParameters
+from .exceptions import GroupInvalidParameters, InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
 

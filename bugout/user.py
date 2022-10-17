@@ -1,10 +1,10 @@
-from typing import Any, Dict, List, Optional, Union
 import uuid
+from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import Method, TokenType, BugoutUser, BugoutToken, BugoutUserTokens
+from .data import AuthType, BugoutToken, BugoutUser, BugoutUserTokens, Method, TokenType
 from .exceptions import InvalidUrlSpec, TokenInvalidParameters
-from .settings import REQUESTS_TIMEOUT
+from .settings import REQUESTS_TIMEOUT, BUGOUT_APPLICATION_ID_HEADER
 
 
 class User:
@@ -28,9 +28,10 @@ class User:
     # User module
     def create_user(
         self,
-        username: str,
-        email: str,
-        password: str,
+        username: Optional[str] = None,
+        email: Optional[str] = None,
+        password: Optional[str] = None,
+        signature: Optional[str] = None,
         application_id: Optional[Union[str, uuid.UUID]] = None,
         **kwargs: Dict[str, Any],
     ) -> BugoutUser:
@@ -39,6 +40,7 @@ class User:
             "username": username,
             "email": email,
             "password": password,
+            "signature": signature,
             "application_id": application_id,
         }
         headers = {}
@@ -49,21 +51,34 @@ class User:
         )
         return BugoutUser(**result)
 
-    def get_user(self, token: Union[str, uuid.UUID]) -> BugoutUser:
+    def get_user(
+        self,
+        token: Union[str, uuid.UUID],
+        application_id: Optional[Union[str, uuid.UUID]] = None,
+        auth_type: AuthType = AuthType.bearer,
+    ) -> BugoutUser:
         get_user_path = "user"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
+        if auth_type == AuthType.web3 and application_id is not None:
+            headers[BUGOUT_APPLICATION_ID_HEADER] = str(application_id)
         result = self._call(method=Method.get, path=get_user_path, headers=headers)
         return BugoutUser(**result)
 
     def get_user_by_id(
-        self, token: Union[str, uuid.UUID], user_id: Union[str, uuid.UUID]
+        self,
+        token: Union[str, uuid.UUID],
+        user_id: Union[str, uuid.UUID],
+        application_id: Optional[Union[str, uuid.UUID]] = None,
+        auth_type: AuthType = AuthType.bearer,
     ) -> BugoutUser:
         get_user_by_id_path = f"user/{user_id}"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
+        if auth_type == AuthType.web3 and application_id is not None:
+            headers[BUGOUT_APPLICATION_ID_HEADER] = str(application_id)
         result = self._call(
             method=Method.get, path=get_user_by_id_path, headers=headers
         )
