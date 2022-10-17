@@ -64,22 +64,31 @@ class Bugout:
     def get_user(
         self,
         token: Union[str, uuid.UUID],
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutUser:
         self.user.timeout = timeout
-        return self.user.get_user(token=token, auth_type=data.AuthType[auth_type])
+        return self.user.get_user(
+            token=token,
+            application_id=application_id,
+            auth_type=data.AuthType[auth_type],
+        )
 
     def get_user_by_id(
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
     ) -> data.BugoutUser:
         self.user.timeout = timeout
         return self.user.get_user_by_id(
-            token=token, user_id=user_id, auth_type=data.AuthType[auth_type]
+            token=token,
+            user_id=user_id,
+            application_id=application_id,
+            auth_type=data.AuthType[auth_type],
         )
 
     def find_user(

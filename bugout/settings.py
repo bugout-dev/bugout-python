@@ -12,3 +12,8 @@ except:
     raise Exception(
         f"Could not parse BUGOUT_REQUESTS_TIMEOUT environment variable as int: {REQUESTS_TIMEOUT_RAW}"
     )
+
+# Web3 signature
+BUGOUT_APPLICATION_ID_HEADER = os.environ.get(
+    "BUGOUT_APPLICATION_ID_HEADER", "x-bugout-application-id"
+)
