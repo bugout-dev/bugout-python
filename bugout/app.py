@@ -64,31 +64,28 @@ class Bugout:
     def get_user(
         self,
         token: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
         return self.user.get_user(
             token=token,
-            application_id=application_id,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_user_by_id(
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
         return self.user.get_user_by_id(
-            token=token,
-            user_id=user_id,
-            application_id=application_id,
-            auth_type=data.AuthType[auth_type],
+            token=token, user_id=user_id, auth_type=data.AuthType[auth_type], **kwargs
         )
 
     def find_user(
@@ -486,6 +483,7 @@ class Bugout:
         journal_type: Optional[Union[str, data.JournalTypes]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         if journal_type is None:
@@ -495,6 +493,7 @@ class Bugout:
             name=name,
             journal_type=data.JournalTypes(journal_type),
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def list_journals(
@@ -502,10 +501,11 @@ class Bugout:
         token: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournals:
         self.journal.timeout = timeout
         return self.journal.list_journals(
-            token=token, auth_type=data.AuthType[auth_type]
+            token=token, auth_type=data.AuthType[auth_type], **kwargs
         )
 
     def get_journal(
@@ -514,10 +514,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         return self.journal.get_journal(
-            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+            token=token,
+            journal_id=journal_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def update_journal(
@@ -527,6 +531,7 @@ class Bugout:
         name: str,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         return self.journal.update_journal(
@@ -534,6 +539,7 @@ class Bugout:
             journal_id=journal_id,
             name=name,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def delete_journal(
@@ -542,10 +548,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournal:
         self.journal.timeout = timeout
         return self.journal.delete_journal(
-            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+            token=token,
+            journal_id=journal_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     # Journal entries
@@ -561,6 +571,7 @@ class Bugout:
         context_type: Optional[str] = None,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.create_entry(
@@ -573,6 +584,7 @@ class Bugout:
             context_id=context_id,
             context_type=context_type,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def create_entries_pack(
@@ -582,6 +594,7 @@ class Bugout:
         entries: List[Dict[str, Any]],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntries:
         self.journal.timeout = timeout
         entries_obj = data.BugoutJournalEntriesRequest(
@@ -592,6 +605,7 @@ class Bugout:
             journal_id=journal_id,
             entries=entries_obj,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_entry(
@@ -601,6 +615,7 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.get_entry(
@@ -608,6 +623,7 @@ class Bugout:
             journal_id=journal_id,
             entry_id=entry_id,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_entries(
@@ -616,10 +632,14 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntries:
         self.journal.timeout = timeout
         return self.journal.get_entries(
-            token=token, journal_id=journal_id, auth_type=data.AuthType[auth_type]
+            token=token,
+            journal_id=journal_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_entry_content(
@@ -629,6 +649,7 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntryContent:
         self.journal.timeout = timeout
         return self.journal.get_entry_content(
@@ -636,6 +657,7 @@ class Bugout:
             journal_id=journal_id,
             entry_id=entry_id,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def update_entry_content(
@@ -649,6 +671,7 @@ class Bugout:
         tags: Optional[List[str]] = None,
         tags_action: TagsAction = TagsAction.merge,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntryContent:
         self.journal.timeout = timeout
         return self.journal.update_entry_content(
@@ -660,6 +683,7 @@ class Bugout:
             tags=tags,
             tags_action=tags_action,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def delete_entry(
@@ -669,6 +693,7 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntry:
         self.journal.timeout = timeout
         return self.journal.delete_entry(
@@ -676,6 +701,7 @@ class Bugout:
             journal_id=journal_id,
             entry_id=entry_id,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     # Tags
@@ -696,6 +722,7 @@ class Bugout:
         tags: List[str],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> List[Any]:
         self.journal.timeout = timeout
         return self.journal.create_tags(
@@ -704,6 +731,7 @@ class Bugout:
             entry_id=entry_id,
             tags=tags,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_tags(
@@ -713,6 +741,7 @@ class Bugout:
         entry_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntryTags:
         self.journal.timeout = timeout
         return self.journal.get_tags(
@@ -720,6 +749,7 @@ class Bugout:
             journal_id=journal_id,
             entry_id=entry_id,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def update_tags(
@@ -730,6 +760,7 @@ class Bugout:
         tags: List[str],
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> List[Any]:
         self.journal.timeout = timeout
         return self.journal.update_tags(
@@ -738,6 +769,7 @@ class Bugout:
             entry_id=entry_id,
             tags=tags,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def delete_tag(
@@ -748,6 +780,7 @@ class Bugout:
         tag: str,
         timeout: float = REQUESTS_TIMEOUT,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntryTags:
         self.journal.timeout = timeout
         return self.journal.delete_tag(
@@ -756,6 +789,7 @@ class Bugout:
             entry_id=entry_id,
             tag=tag,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     # Search
@@ -771,6 +805,7 @@ class Bugout:
         timeout: float = REQUESTS_TIMEOUT,
         order: SearchOrder = SearchOrder.DESCENDING,
         auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutSearchResults:
         self.journal.timeout = timeout
         return self.journal.search(
@@ -783,6 +818,7 @@ class Bugout:
             content,
             order=order,
             auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     # Public

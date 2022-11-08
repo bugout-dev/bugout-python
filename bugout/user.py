@@ -54,15 +54,15 @@ class User:
     def get_user(
         self,
         token: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
     ) -> BugoutUser:
         get_user_path = "user"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        if auth_type == AuthType.web3 and application_id is not None:
-            headers[BUGOUT_APPLICATION_ID_HEADER] = str(application_id)
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
         result = self._call(method=Method.get, path=get_user_path, headers=headers)
         return BugoutUser(**result)
 
@@ -70,15 +70,15 @@ class User:
         self,
         token: Union[str, uuid.UUID],
         user_id: Union[str, uuid.UUID],
-        application_id: Optional[Union[str, uuid.UUID]] = None,
         auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
     ) -> BugoutUser:
         get_user_by_id_path = f"user/{user_id}"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        if auth_type == AuthType.web3 and application_id is not None:
-            headers[BUGOUT_APPLICATION_ID_HEADER] = str(application_id)
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
         result = self._call(
             method=Method.get, path=get_user_by_id_path, headers=headers
         )
