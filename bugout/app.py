@@ -91,7 +91,7 @@ class Bugout:
     def find_user(
         self,
         username: str,
-        token: Union[str, uuid.UUID] = None,
+        token: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
