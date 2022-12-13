@@ -371,6 +371,9 @@ class Journal:
         content: str,
         tags: Optional[List[str]] = None,
         tags_action: TagsAction = TagsAction.merge,
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
     ) -> BugoutJournalEntryContent:
@@ -379,6 +382,9 @@ class Journal:
         json: Dict[str, Any] = {
             "title": title,
             "content": content,
+            "context_url": context_url,
+            "context_id": context_id,
+            "context_type": context_type,
         }
         if tags is not None:
             json["tags"] = tags

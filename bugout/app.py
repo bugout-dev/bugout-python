@@ -91,7 +91,7 @@ class Bugout:
     def find_user(
         self,
         username: str,
-        token: Union[str, uuid.UUID] = None,
+        token: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
@@ -670,6 +670,9 @@ class Bugout:
         timeout: float = REQUESTS_TIMEOUT,
         tags: Optional[List[str]] = None,
         tags_action: TagsAction = TagsAction.merge,
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
         auth_type: str = data.AuthType.bearer.name,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntryContent:
@@ -682,6 +685,9 @@ class Bugout:
             content=content,
             tags=tags,
             tags_action=tags_action,
+            context_url=context_url,
+            context_id=context_id,
+            context_type=context_type,
             auth_type=data.AuthType[auth_type],
             **kwargs,
         )

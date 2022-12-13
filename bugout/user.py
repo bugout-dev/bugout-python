@@ -87,7 +87,7 @@ class User:
     def find_user(
         self,
         username: str,
-        token: Union[str, uuid.UUID] = None,
+        token: Optional[Union[str, uuid.UUID]] = None,
         **kwargs: Dict[str, Any],
     ) -> BugoutUser:
         find_user_path = f"user/find?username={username}"

@@ -205,6 +205,8 @@ class BugoutJournalEntriesRequest(BaseModel):
 class BugoutJournalEntryContent(BaseModel):
     title: str
     content: str
+    tags: List[str] = Field(default_factory=list)
+    locked_by: Optional[str] = None
 
 
 class BugoutJournalEntryTags(BaseModel):
