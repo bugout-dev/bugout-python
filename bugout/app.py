@@ -453,6 +453,8 @@ class Bugout:
         holder_id: Union[str, uuid.UUID],
         permission_list: List[str],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalScopeSpecs:
         self.journal.timeout = timeout
         return self.journal.update_journal_scopes(
@@ -461,6 +463,8 @@ class Bugout:
             holder_type=data.HolderType(holder_type),
             holder_id=holder_id,
             permission_list=permission_list,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def delete_journal_scopes(
@@ -471,6 +475,8 @@ class Bugout:
         holder_id: Union[str, uuid.UUID],
         permission_list: List[str],
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalScopeSpecs:
         self.journal.timeout = timeout
         return self.journal.delete_journal_scopes(
@@ -479,6 +485,8 @@ class Bugout:
             holder_type=data.HolderType(holder_type),
             holder_id=holder_id,
             permission_list=permission_list,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     # Journal handlers
