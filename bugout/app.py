@@ -424,10 +424,16 @@ class Bugout:
         journal_id: Union[str, uuid.UUID],
         holder_ids: Optional[List[Union[str, uuid.UUID]]] = None,
         timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalPermissions:
         self.journal.timeout = timeout
         return self.journal.get_journal_permissions(
-            token=token, journal_id=journal_id, holder_ids=holder_ids
+            token=token,
+            journal_id=journal_id,
+            holder_ids=holder_ids,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
         )
 
     def get_journal_scopes(

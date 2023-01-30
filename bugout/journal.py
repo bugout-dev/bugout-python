@@ -81,11 +81,15 @@ class Journal:
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],
         holder_ids: Optional[List[Union[str, uuid.UUID]]] = None,
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
     ) -> BugoutJournalPermissions:
         journal_scopes_path = f"journals/{journal_id}/permissions"
         headers = {
-            "Authorization": f"Bearer {token}",
+            "Authorization": f"{auth_type.value} {token}",
         }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
         query_params = {}
         if holder_ids is not None:
             holder_ids_string = [str(holder_id) for holder_id in holder_ids]
