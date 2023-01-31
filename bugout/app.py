@@ -841,14 +841,78 @@ class Bugout:
             **kwargs,
         )
 
-    # Public
+    # Public journals
     def check_journal_public(
         self,
         journal_id: Union[str, uuid.UUID],
         timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
     ) -> bool:
         self.journal.timeout = timeout
-        return self.journal.check_journal_public(journal_id=journal_id)
+        return self.journal.check_journal_public(journal_id=journal_id, **kwargs)
+
+    def list_public_journals(
+        self,
+        user_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournals:
+        self.journal.timeout = timeout
+        return self.journal.list_public_journals(user_id=user_id, **kwargs)
+
+    def get_public_journal(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournal:
+        self.journal.timeout = timeout
+        return self.journal.get_public_journal(journal_id=journal_id, **kwargs)
+
+    def get_public_journal_entries(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntries:
+        self.journal.timeout = timeout
+        return self.journal.get_public_journal_entries(journal_id=journal_id, **kwargs)
+
+    def get_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntry:
+        self.journal.timeout = timeout
+        return self.journal.get_public_journal_entry(
+            journal_id=journal_id, entry_id=entry_id, **kwargs
+        )
+
+    def public_search(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        query: str,
+        filters: Optional[List[str]] = None,
+        limit: int = 10,
+        offset: int = 0,
+        content: bool = True,
+        timeout: float = REQUESTS_TIMEOUT,
+        order: SearchOrder = SearchOrder.DESCENDING,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutSearchResults:
+        self.journal.timeout = timeout
+        return self.journal.public_search(
+            journal_id,
+            query,
+            filters,
+            limit,
+            offset,
+            content,
+            order=order,
+            **kwargs,
+        )
 
     # Humbug
     def get_humbug_integrations(
