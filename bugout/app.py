@@ -878,6 +878,42 @@ class Bugout:
         self.journal.timeout = timeout
         return self.journal.get_public_journal_entries(journal_id=journal_id, **kwargs)
 
+    def create_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        title: str,
+        content: str,
+        tags: List[str] = [],
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntry:
+        self.journal.timeout = timeout
+        return self.journal.create_public_journal_entry(
+            journal_id=journal_id,
+            title=title,
+            content=content,
+            tags=tags,
+            context_url=context_url,
+            context_id=context_id,
+            context_type=context_type,
+            **kwargs,
+        )
+
+    def touch_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        **kwargs: Dict[str, Any],
+    ) -> List[str]:
+        self.journal.timeout = timeout
+        return self.journal.touch_public_journal_entry(
+            journal_id=journal_id, entry_id=entry_id, **kwargs
+        )
+
     def get_public_journal_entry(
         self,
         journal_id: Union[str, uuid.UUID],

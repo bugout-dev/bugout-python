@@ -619,6 +619,51 @@ class Journal:
         )
         return BugoutJournalEntries(**result)
 
+    def create_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        title: str,
+        content: str,
+        tags: List[str] = [],
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntry:
+        entry_path = f"public/{journal_id}/entries"
+        json = {
+            "title": title,
+            "content": content,
+            "tags": tags,
+            "context_url": context_url,
+            "context_id": context_id,
+            "context_type": context_type,
+        }
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.post, path=entry_path, headers=headers, json=json
+        )
+        return BugoutJournalEntry(**result)
+
+    def touch_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> List[str]:
+        public_journal_path = f"public/{journal_id}/entries/{entry_id}"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.put,
+            path=public_journal_path,
+            headers=headers,
+        )
+        return result
+
     def get_public_journal_entry(
         self,
         journal_id: Union[str, uuid.UUID],
