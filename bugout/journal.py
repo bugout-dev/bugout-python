@@ -556,9 +556,155 @@ class Journal:
         )
         return BugoutSearchResults(**result)
 
-    # Public module
-    def check_journal_public(self, journal_id: Union[str, uuid.UUID]) -> bool:
-        journal_path = "public/check"
-        query_params = {"journal_id": journal_id}
-        result = self._call(method=Method.get, path=journal_path, params=query_params)
+    # Public journals module
+    def check_journal_public(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> bool:
+        check_path = f"public/{journal_id}/check"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.get, path=check_path, headers=headers)
         return result
+
+    def list_public_journals(
+        self,
+        user_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournals:
+        public_journals_path = "public"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        query_params = {"user_id": user_id}
+        result = self._call(
+            method=Method.get,
+            path=public_journals_path,
+            params=query_params,
+            headers=headers,
+        )
+        return BugoutJournals(**result)
+
+    def get_public_journal(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournal:
+        public_journal_path = f"public/{journal_id}"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.get,
+            path=public_journal_path,
+            headers=headers,
+        )
+        return BugoutJournal(**result)
+
+    def get_public_journal_entries(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntries:
+        public_journal_path = f"public/{journal_id}/entries"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.get,
+            path=public_journal_path,
+            headers=headers,
+        )
+        return BugoutJournalEntries(**result)
+
+    def create_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        title: str,
+        content: str,
+        tags: List[str] = [],
+        context_url: Optional[str] = None,
+        context_id: Optional[str] = None,
+        context_type: Optional[str] = None,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntry:
+        entry_path = f"public/{journal_id}/entries"
+        json = {
+            "title": title,
+            "content": content,
+            "tags": tags,
+            "context_url": context_url,
+            "context_id": context_id,
+            "context_type": context_type,
+        }
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.post, path=entry_path, headers=headers, json=json
+        )
+        return BugoutJournalEntry(**result)
+
+    def touch_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> List[str]:
+        public_journal_path = f"public/{journal_id}/entries/{entry_id}"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.put,
+            path=public_journal_path,
+            headers=headers,
+        )
+        return result
+
+    def get_public_journal_entry(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        entry_id: Union[str, uuid.UUID],
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntry:
+        public_journal_path = f"public/{journal_id}/entries/{entry_id}"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.get,
+            path=public_journal_path,
+            headers=headers,
+        )
+        return BugoutJournalEntry(**result)
+
+    def public_search(
+        self,
+        journal_id: Union[str, uuid.UUID],
+        query: str,
+        filters: Optional[List[str]] = None,
+        limit: int = 10,
+        offset: int = 0,
+        content: bool = True,
+        order: SearchOrder = SearchOrder.DESCENDING,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutSearchResults:
+        search_path = f"public/{journal_id}/search"
+        headers = {}
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        query_params = {
+            "q": query,
+            "filters": filters if filters is not None else [],
+            "limit": limit,
+            "offset": offset,
+            "content": content,
+            "order": order.value,
+        }
+        result = self._call(
+            method=Method.get, path=search_path, params=query_params, headers=headers
+        )
+        return BugoutSearchResults(**result)
