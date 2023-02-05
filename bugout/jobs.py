@@ -5,6 +5,7 @@ integration: https://github.com/bugout-dev/thorax
 
 import argparse
 from datetime import datetime
+from enum import Enum
 import json
 import os
 import requests
@@ -20,6 +21,12 @@ DEFAULT_CONTEXT_TYPE = "job"
 DEFAULT_SUCCESS_TAG = "job:success"
 DEFAULT_FAILURE_TAG = "job:failure"
 DEFAULT_CURSOR_CONTEXT_TYPE = "job_cursor"
+
+
+class JobView(Enum):
+    REMAINING = "remaining"
+    SUCCESS = "success"
+    FAILURE = "failure"
 
 
 class BugoutJobQueue:
@@ -95,24 +102,45 @@ class BugoutJobQueue:
             timeout=self.write_timeout,
         )
 
-    def remaining_jobs(
+    def list_jobs(
         self,
+        job_view: JobView = JobView.REMAINING,
         use_cursor: bool = True,
         limit: int = 10,
         offset: int = 0,
     ) -> List[BugoutSearchResultWithEntryID]:
         """
-        List all remaining jobs. These are jobs that have neither been marked as complete nor as failed.
+        List all jobs from the given job view:
+        - REMAINING: These are jobs that have neither been marked as complete nor as failed.
+        - SUCCESS: These are jobs that have been marked as successfully completed.
+        - FAILURE: These are jobs that have meen marked as failures.
+
         If the use_cursor argument is True, this only returns jobs since the most recent cursor. If it is
-        False, remaining_jobs returns all incomplete and unfailed jobs since the beginning of time.
+        False, returns all jobs from the given job view since the beginning of time.
+
+        Use the limit and offset parameters to page through the jobs.
 
         Jobs are returned in chronological order.
         """
         query_components: List[str] = [
             f"context_type:{self.context_type}",
-            f"!tag:{self.success_tag}",
-            f"!tag:{self.failure_tag}",
         ]
+        if job_view == JobView.REMAINING:
+            query_components.extend(
+                [
+                    f"!tag:{self.success_tag}",
+                    f"!tag:{self.failure_tag}",
+                ]
+            )
+        elif job_view == JobView.SUCCESS:
+            query_components.append(
+                f"tag:{self.success_tag}",
+            )
+        elif job_view == JobView.FAILURE:
+            query_components.append(
+                f"tag:{self.failure_tag}",
+            )
+
         if use_cursor:
             cursor_results = self.client.search(
                 self.bugout_token,
@@ -282,10 +310,10 @@ def handle_create_job(args: argparse.Namespace) -> None:
     queue.create_job(args.id, args.title, args.content)
 
 
-def handle_remaining_jobs(args: argparse.Namespace) -> None:
+def handle_list_jobs(args: argparse.Namespace) -> None:
     queue = queue_from_args(args)
-    remaining_jobs = queue.remaining_jobs(args.use_cursor, args.limit, args.offset)
-    print(json.dumps([json.loads(job.json()) for job in remaining_jobs]))
+    jobs = queue.list_jobs(args.view, args.use_cursor, args.limit, args.offset)
+    print(json.dumps([json.loads(job.json()) for job in jobs]))
 
 
 def handle_complete_job(args: argparse.Namespace) -> None:
@@ -323,26 +351,34 @@ def generate_cli() -> argparse.ArgumentParser:
     )
     create_job_parser.set_defaults(func=handle_create_job)
 
-    remaining_jobs_parser = subparsers.add_parser(
-        "remaining-jobs", help="View remaining jobs in queue (FIFO order)"
+    list_jobs_parser = subparsers.add_parser(
+        "list-jobs", help="View jobs in queue (FIFO order)"
     )
-    add_queue_args(remaining_jobs_parser)
-    remaining_jobs_parser.add_argument(
+    add_queue_args(list_jobs_parser)
+    list_jobs_parser.add_argument(
+        "-v",
+        "--view",
+        required=True,
+        type=JobView,
+        choices=[JobView.REMAINING, JobView.SUCCESS, JobView.FAILURE],
+        help="What kind of jobs to list from the queue.",
+    )
+    list_jobs_parser.add_argument(
         "-c",
         "--use-cursor",
         action="store_true",
-        help="Set this flag if you want to only view remaining jobs created after the most recent cursor position",
+        help="Set this flag if you want to only view list jobs created after the most recent cursor position",
     )
-    remaining_jobs_parser.add_argument(
-        "--limit", type=int, default=10, help="Number of remaining jobs to view"
+    list_jobs_parser.add_argument(
+        "--limit", type=int, default=10, help="Number of list jobs to view"
     )
-    remaining_jobs_parser.add_argument(
+    list_jobs_parser.add_argument(
         "--offset",
         type=int,
         default=0,
-        help="Offset from which to page through remaining jobs",
+        help="Offset from which to page through list jobs",
     )
-    remaining_jobs_parser.set_defaults(func=handle_remaining_jobs)
+    list_jobs_parser.set_defaults(func=handle_list_jobs)
 
     complete_job_parser = subparsers.add_parser(
         "complete-job", help="Mark a job as complete"
