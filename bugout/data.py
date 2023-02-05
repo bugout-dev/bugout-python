@@ -245,3 +245,7 @@ class BugoutHumbugIntegration(BaseModel):
 
 class BugoutHumbugIntegrationsList(BaseModel):
     integrations: List[BugoutHumbugIntegration] = Field(default_factory=list)
+
+
+class BugoutSearchResultWithEntryID(BugoutSearchResult):
+    id: str
