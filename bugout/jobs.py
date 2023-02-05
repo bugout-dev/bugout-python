@@ -40,6 +40,8 @@ class BugoutJobQueue:
     3. A special tag that is used to denote whether a job has been completed successfully.
     4. A special tag that is used to denote whether a job failed.
     5. A context_type for entries that represent cursor entries for the job queue.
+
+    Note that this job queue assumes a single consumer per set of (success_tag, failure_tag, cursor_context_type).
     """
 
     def __init__(
