@@ -95,12 +95,14 @@ class BugoutJobQueue:
             "context_type": self.cursor_context_type,
             "created_at": created_at.isoformat(),
         }
-        requests.post(
-            self.client.spire_api_url,
+        request_url = f'{self.client.spire_api_url.rstrip("/")}/journals/{self.journal_id}/entries'
+        r = requests.post(
+            request_url,
             headers=headers,
             json=body,
             timeout=self.write_timeout,
         )
+        r.raise_for_status()
 
     def list_jobs(
         self,
@@ -178,6 +180,9 @@ class BugoutJobQueue:
         return results
 
     def job_complete(self, job_id: str) -> None:
+        """
+        Mark a job as successfully completed.
+        """
         self.client.update_tags(
             self.bugout_token,
             self.journal_id,
@@ -188,6 +193,9 @@ class BugoutJobQueue:
         )
 
     def job_failed(self, job_id: str) -> None:
+        """
+        Mark a job as failed.
+        """
         self.client.update_tags(
             self.bugout_token,
             self.journal_id,
@@ -305,9 +313,7 @@ def queue_from_args(args: argparse.Namespace) -> BugoutJobQueue:
 
 def handle_create_job(args: argparse.Namespace) -> None:
     queue = queue_from_args(args)
-    if args.title is None:
-        args.title = f"Job ID: {args.id}"
-    queue.create_job(args.id, args.title, args.content)
+    queue.create_job(args.context_id, args.title, args.content)
 
 
 def handle_list_jobs(args: argparse.Namespace) -> None:
@@ -326,6 +332,13 @@ def handle_fail_job(args: argparse.Namespace) -> None:
     queue.job_failed(args.job_id)
 
 
+def handle_update_cursor(args: argparse.Namespace) -> None:
+    queue = queue_from_args(args)
+    if args.time is None:
+        args.time = datetime.utcnow()
+    queue.update_cursor(created_at=args.time)
+
+
 def generate_cli() -> argparse.ArgumentParser:
     """
     Generates the "bugout-py jobs" CLI.
@@ -339,12 +352,16 @@ def generate_cli() -> argparse.ArgumentParser:
 
     create_job_parser = subparsers.add_parser("create-job", help="Create a job")
     add_queue_args(create_job_parser)
-    create_job_parser.add_argument("--id", required=True, help="ID for job.")
+    create_job_parser.add_argument(
+        "--context-id",
+        required=False,
+        default="",
+        help="Context ID for job. This is not used by Bugout, but can provide useful context to queue consumers.",
+    )
     create_job_parser.add_argument(
         "--title",
-        required=False,
-        default=None,
-        help="Title for job. If not provided, title is constructed from job ID.",
+        required=True,
+        help="Title for job.",
     )
     create_job_parser.add_argument(
         "--content", required=True, help="Job specification."
@@ -395,6 +412,19 @@ def generate_cli() -> argparse.ArgumentParser:
         "-i", "--job-id", required=True, help="ID of job to mark as failed."
     )
     fail_job_parser.set_defaults(func=handle_fail_job)
+
+    update_cursor_parser = subparsers.add_parser(
+        "update-cursor", help="Update the cursor in the job queue"
+    )
+    add_queue_args(update_cursor_parser)
+    update_cursor_parser.add_argument(
+        "--time",
+        type=datetime.fromisoformat,
+        required=False,
+        default=None,
+        help="Time to update the cursor to. If not provided, uses the current system time on the client.",
+    )
+    update_cursor_parser.set_defaults(func=handle_update_cursor)
 
     return parser
 
