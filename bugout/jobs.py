@@ -8,8 +8,7 @@ from datetime import datetime
 import json
 import os
 import requests
-from typing import Callable, Optional
-from uuid import UUID
+from typing import Callable, Optional, List
 
 from .app import Bugout
 from .data import AuthType, BugoutSearchResultWithEntryID
@@ -81,7 +80,7 @@ class BugoutJobQueue:
         This is done by simply creating a new entry representing the cursor position.
         """
         cursor_tag = f"cursor:{self.cursor_context_type}"
-        headers = {"Authorization": f"{self.auth_type.value} {self.bugout_token}"}
+        headers = {"Authorization": f"{self.auth_type} {self.bugout_token}"}
         body = {
             "title": cursor_tag,
             "content": "",
@@ -101,7 +100,7 @@ class BugoutJobQueue:
         use_cursor: bool = True,
         limit: int = 10,
         offset: int = 0,
-    ) -> list[BugoutSearchResultWithEntryID]:
+    ) -> List[BugoutSearchResultWithEntryID]:
         """
         List all remaining jobs. These are jobs that have neither been marked as complete nor as failed.
         If the use_cursor argument is True, this only returns jobs since the most recent cursor. If it is
@@ -109,7 +108,7 @@ class BugoutJobQueue:
 
         Jobs are returned in chronological order.
         """
-        query_components: list[str] = [
+        query_components: List[str] = [
             f"context_type:{self.context_type}",
             f"!tag:{self.success_tag}",
             f"!tag:{self.failure_tag}",
