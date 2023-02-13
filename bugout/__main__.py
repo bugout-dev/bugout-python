@@ -2,6 +2,7 @@ import argparse
 import textwrap
 
 from .app import Bugout
+from .jobs import generate_cli as generate_jobs_cli
 
 
 def get_methods_list(args: argparse.Namespace) -> None:
@@ -26,6 +27,13 @@ def main() -> None:
         "methods", description="Work with Bugout users API handlers"
     )
     parser_common.set_defaults(func=get_methods_list)
+
+    parser_jobs = generate_jobs_cli()
+    subcommands.add_parser(
+        "jobs",
+        parents=[parser_jobs],
+        add_help=False,
+    )
 
     args = parser.parse_args()
     args.func(args)
