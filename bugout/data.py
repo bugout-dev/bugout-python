@@ -215,6 +215,15 @@ class BugoutJournalEntryTags(BaseModel):
     tags: List[str]
 
 
+class BugoutJournalEntryTagsRequest(BaseModel):
+    entry_id: uuid.UUID
+    tags: List[str]
+
+
+class BugoutJournalEntriesTagsRequest(BaseModel):
+    entries_tags: List[BugoutJournalEntryTags] = Field(default_factory=list)
+
+
 class BugoutSearchResult(BaseModel):
     entry_url: str
     content_url: str
