@@ -473,7 +473,7 @@ class Journal:
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
     ) -> List[Any]:
-        tags_path = f"journals/{journal_id}/entries_tags"
+        tags_path = f"journals/{journal_id}/bulk_entries_tags"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
@@ -560,7 +560,7 @@ class Journal:
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
     ) -> List[Any]:
-        tags_path = f"journals/{journal_id}/entries_tags"
+        tags_path = f"journals/{journal_id}/bulk_entries_tags"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
