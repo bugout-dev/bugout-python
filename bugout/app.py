@@ -411,6 +411,39 @@ class Bugout:
         self.resource.timeout = timeout
         return self.resource.delete_resource(token=token, resource_id=resource_id)
 
+    def get_resource_holders(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResourceHolders:
+        self.resource.timeout = timeout
+        return self.resource.get_resource_holders(token=token, resource_id=resource_id)
+
+    def add_resource_holder_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        holder_permissions: data.BugoutResourceHolder,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResourceHolders:
+        self.resource.timeout = timeout
+        return self.resource.add_resource_holder_permissions(
+            token=token, resource_id=resource_id, holder_permissions=holder_permissions
+        )
+
+    def delete_resource_holder_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        holder_permissions: data.BugoutResourceHolder,
+        timeout: float = REQUESTS_TIMEOUT,
+    ) -> data.BugoutResourceHolders:
+        self.resource.timeout = timeout
+        return self.resource.delete_resource_holder_permissions(
+            token=token, resource_id=resource_id, holder_permissions=holder_permissions
+        )
+
     # Journal scopes handlers
     def list_scopes(
         self, token: Union[str, uuid.UUID], api: str, timeout: float = REQUESTS_TIMEOUT

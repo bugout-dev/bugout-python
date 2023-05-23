@@ -33,6 +33,14 @@ class HolderType(Enum):
     group = "group"
 
 
+class ResourcePermissions(Enum):
+    ADMIN = "admin"
+    CREATE = "create"
+    READ = "read"
+    UPDATE = "update"
+    DELETE = "delete"
+
+
 class AuthType(Enum):
     bearer = "Bearer"
     web3 = "Web3"
@@ -125,6 +133,22 @@ class BugoutResource(BaseModel):
 
 class BugoutResources(BaseModel):
     resources: List[BugoutResource]
+
+
+class BugoutResourceHolder(BaseModel):
+    id: uuid.UUID = Field(alias="holder_id")
+    holder_type: HolderType
+    permissions: List[ResourcePermissions] = Field(default_factory=list)
+
+    class Config:
+        # Required configuration because in Brood we use "holder_id" instead of "id"
+        # during creation and deletion of new permissions for holder
+        allow_population_by_field_name = True
+
+
+class BugoutResourceHolders(BaseModel):
+    resource_id: uuid.UUID
+    holders: List[BugoutResourceHolder] = Field(default_factory=list)
 
 
 class BugoutJournalPermission(BaseModel):
