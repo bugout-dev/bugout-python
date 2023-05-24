@@ -221,7 +221,7 @@ class BugoutJournalEntryTagsRequest(BaseModel):
 
 
 class BugoutJournalEntriesTagsRequest(BaseModel):
-    entries_tags: List[BugoutJournalEntryTags] = Field(default_factory=list)
+    entries_tags: List[BugoutJournalEntryTagsRequest] = Field(default_factory=list)
 
 
 class BugoutSearchResult(BaseModel):

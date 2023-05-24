@@ -472,7 +472,7 @@ class Journal:
         entries_tags: BugoutJournalEntriesTagsRequest,
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
-    ) -> List[Any]:
+    ) -> BugoutJournalEntries:
         tags_path = f"journals/{journal_id}/bulk_entries_tags"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
@@ -480,7 +480,7 @@ class Journal:
         json = {
             "entries": [
                 {
-                    "entry_id": entry.entry_id,
+                    "journal_entry_id": str(entry.entry_id),
                     "tags": entry.tags,
                 }
                 for entry in entries_tags.entries_tags
@@ -491,7 +491,10 @@ class Journal:
         result = self._call(
             method=Method.post, path=tags_path, headers=headers, json=json
         )
-        return result
+
+        return BugoutJournalEntries(
+            entries=[BugoutJournalEntry(**entry) for entry in result]
+        )
 
     def get_tags(
         self,
@@ -559,7 +562,7 @@ class Journal:
         entries_tags: BugoutJournalEntriesTagsRequest,
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
-    ) -> List[Any]:
+    ) -> BugoutJournalEntries:
         tags_path = f"journals/{journal_id}/bulk_entries_tags"
         headers = {
             "Authorization": f"{auth_type.value} {token}",
@@ -567,7 +570,7 @@ class Journal:
         json = {
             "entries": [
                 {
-                    "entry_id": entry.entry_id,
+                    "journal_entry_id": str(entry.entry_id),
                     "tags": entry.tags,
                 }
                 for entry in entries_tags.entries_tags
@@ -578,7 +581,10 @@ class Journal:
         result = self._call(
             method=Method.delete, path=tags_path, headers=headers, json=json
         )
-        return result
+
+        return BugoutJournalEntries(
+            entries=[BugoutJournalEntry(**entry) for entry in result]
+        )
 
     # Search module
     def search(
