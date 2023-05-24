@@ -2,7 +2,13 @@ import uuid
 from typing import Any, Dict, Optional, Union
 
 from .calls import make_request
-from .data import BugoutResource, BugoutResources, Method
+from .data import (
+    BugoutResource,
+    BugoutResources,
+    Method,
+    BugoutResourceHolder,
+    BugoutResourceHolders,
+)
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
@@ -99,3 +105,45 @@ class Resource:
         }
         result = self._call(method=Method.delete, path=resources_path, headers=headers)
         return BugoutResource(**result)
+
+    def get_resource_holders(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+    ) -> BugoutResourceHolders:
+        path = f"resources/{resource_id}/holders"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(method=Method.get, path=path, headers=headers)
+        return BugoutResourceHolders(**result)
+
+    def add_resource_holder_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        holder_permissions: BugoutResourceHolder,
+    ) -> BugoutResourceHolders:
+        path = f"resources/{resource_id}/holders"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.post, path=path, headers=headers, json=holder_permissions
+        )
+        return BugoutResourceHolders(**result)
+
+    def delete_resource_holder_permissions(
+        self,
+        token: Union[str, uuid.UUID],
+        resource_id: Union[str, uuid.UUID],
+        holder_permissions: BugoutResourceHolder,
+    ) -> BugoutResourceHolders:
+        path = f"resources/{resource_id}/holders"
+        headers = {
+            "Authorization": f"Bearer {token}",
+        }
+        result = self._call(
+            method=Method.delete, path=path, headers=headers, json=holder_permissions
+        )
+        return BugoutResourceHolders(**result)
