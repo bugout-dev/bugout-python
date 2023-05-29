@@ -240,12 +240,17 @@ class BugoutJournalEntryTags(BaseModel):
 
 
 class BugoutJournalEntryTagsRequest(BaseModel):
-    entry_id: uuid.UUID
+    entry_id: uuid.UUID = Field(alias="journal_entry_id")
     tags: List[str]
+
+    class Config:
+        # Required configuration because in Spire we use "journal_entry_id" instead of "entry_id"
+        # during creation and deletion of new tags for journal entry
+        allow_population_by_field_name = True
 
 
 class BugoutJournalEntriesTagsRequest(BaseModel):
-    entries_tags: List[BugoutJournalEntryTagsRequest] = Field(default_factory=list)
+    entries: List[BugoutJournalEntryTagsRequest] = Field(default_factory=list)
 
 
 class BugoutSearchResult(BaseModel):

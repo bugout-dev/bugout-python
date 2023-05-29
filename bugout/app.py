@@ -799,7 +799,7 @@ class Bugout:
         self.journal.timeout = timeout
 
         entries_tags_obj = data.BugoutJournalEntriesTagsRequest(
-            entries_tags=[
+            entries=[
                 data.BugoutJournalEntryTagsRequest(**entry_tags)
                 for entry_tags in entries_tags
             ]
@@ -881,7 +881,7 @@ class Bugout:
     ) -> data.BugoutJournalEntries:
         self.journal.timeout = timeout
         entries_tags_obj = data.BugoutJournalEntriesTagsRequest(
-            entries_tags=[
+            entries=[
                 data.BugoutJournalEntryTagsRequest(**entry_tags)
                 for entry_tags in entries_tags
             ]

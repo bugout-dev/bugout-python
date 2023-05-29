@@ -477,15 +477,7 @@ class Journal:
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        json = {
-            "entries": [
-                {
-                    "journal_entry_id": str(entry.entry_id),
-                    "tags": entry.tags,
-                }
-                for entry in entries_tags.entries_tags
-            ]
-        }
+        json = entries_tags.dict()
         if "headers" in kwargs.keys():
             headers.update(kwargs["headers"])
         result = self._call(
@@ -567,15 +559,7 @@ class Journal:
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        json = {
-            "entries": [
-                {
-                    "journal_entry_id": str(entry.entry_id),
-                    "tags": entry.tags,
-                }
-                for entry in entries_tags.entries_tags
-            ]
-        }
+        json = entries_tags.dict()
         if "headers" in kwargs.keys():
             headers.update(kwargs["headers"])
         result = self._call(
