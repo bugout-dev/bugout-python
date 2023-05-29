@@ -240,7 +240,7 @@ class BugoutJournalEntryTags(BaseModel):
 
 
 class BugoutJournalEntryTagsRequest(BaseModel):
-    entry_id: uuid.UUID = Field(alias="journal_entry_id")
+    journal_entry_id: uuid.UUID = Field(alias="entry_id")
     tags: List[str]
 
     class Config:

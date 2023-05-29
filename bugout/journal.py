@@ -1,5 +1,6 @@
 import uuid
 from enum import Enum
+import json
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
@@ -477,11 +478,11 @@ class Journal:
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        json = entries_tags.dict()
+        json_body = json.loads(entries_tags.json())
         if "headers" in kwargs.keys():
             headers.update(kwargs["headers"])
         result = self._call(
-            method=Method.post, path=tags_path, headers=headers, json=json
+            method=Method.post, path=tags_path, headers=headers, json=json_body
         )
 
         return BugoutJournalEntries(
@@ -559,11 +560,11 @@ class Journal:
         headers = {
             "Authorization": f"{auth_type.value} {token}",
         }
-        json = entries_tags.dict()
+        json_body = json.loads(entries_tags.json())
         if "headers" in kwargs.keys():
             headers.update(kwargs["headers"])
         result = self._call(
-            method=Method.delete, path=tags_path, headers=headers, json=json
+            method=Method.delete, path=tags_path, headers=headers, json=json_body
         )
 
         return BugoutJournalEntries(
