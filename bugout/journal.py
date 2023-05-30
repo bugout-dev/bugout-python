@@ -1,5 +1,6 @@
 import uuid
 from enum import Enum
+import json
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
@@ -11,6 +12,7 @@ from .data import (
     BugoutJournalEntry,
     BugoutJournalEntryContent,
     BugoutJournalEntryTags,
+    BugoutJournalEntriesTagsRequest,
     BugoutJournalPermissions,
     BugoutJournals,
     BugoutJournalScopeSpecs,
@@ -464,6 +466,29 @@ class Journal:
         )
         return result
 
+    def create_entries_tags(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries_tags: BugoutJournalEntriesTagsRequest,
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntries:
+        tags_path = f"journals/{journal_id}/bulk_entries_tags"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        json_body = json.loads(entries_tags.json())
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.post, path=tags_path, headers=headers, json=json_body
+        )
+
+        return BugoutJournalEntries(
+            entries=[BugoutJournalEntry(**entry) for entry in result]
+        )
+
     def get_tags(
         self,
         token: Union[str, uuid.UUID],
@@ -522,6 +547,29 @@ class Journal:
             method=Method.delete, path=tags_path, headers=headers, json=json
         )
         return BugoutJournalEntryTags(**result)
+
+    def delete_entries_tags(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries_tags: BugoutJournalEntriesTagsRequest,
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntries:
+        tags_path = f"journals/{journal_id}/bulk_entries_tags"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        json_body = json.loads(entries_tags.json())
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.delete, path=tags_path, headers=headers, json=json_body
+        )
+
+        return BugoutJournalEntries(
+            entries=[BugoutJournalEntry(**entry) for entry in result]
+        )
 
     # Search module
     def search(

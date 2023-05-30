@@ -787,6 +787,31 @@ class Bugout:
             **kwargs,
         )
 
+    def create_entries_tags(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries_tags: List[Dict[str, Any]],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntries:
+        self.journal.timeout = timeout
+
+        entries_tags_obj = data.BugoutJournalEntriesTagsRequest(
+            entries=[
+                data.BugoutJournalEntryTagsRequest(**entry_tags)
+                for entry_tags in entries_tags
+            ]
+        )
+        return self.journal.create_entries_tags(
+            token=token,
+            journal_id=journal_id,
+            entries_tags=entries_tags_obj,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
     def get_tags(
         self,
         token: Union[str, uuid.UUID],
@@ -841,6 +866,30 @@ class Bugout:
             journal_id=journal_id,
             entry_id=entry_id,
             tag=tag,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def delete_entries_tags(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entries_tags: List[Dict[str, Any]],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntries:
+        self.journal.timeout = timeout
+        entries_tags_obj = data.BugoutJournalEntriesTagsRequest(
+            entries=[
+                data.BugoutJournalEntryTagsRequest(**entry_tags)
+                for entry_tags in entries_tags
+            ]
+        )
+        return self.journal.delete_entries_tags(
+            token=token,
+            journal_id=journal_id,
+            entries_tags=entries_tags_obj,
             auth_type=data.AuthType[auth_type],
             **kwargs,
         )

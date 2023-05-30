@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-import requests
+import requests  # type: ignore
 
 from .data import Method
 from .exceptions import BugoutResponseException, BugoutUnexpectedResponse
