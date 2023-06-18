@@ -262,6 +262,9 @@ class BugoutSearchResult(BaseModel):
     created_at: str
     updated_at: str
     score: float
+    context_type: Optional[str] = None
+    context_url: Optional[str] = None
+    context_id: Optional[str] = None
 
 
 class BugoutSearchResults(BaseModel):
