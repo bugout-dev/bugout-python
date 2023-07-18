@@ -114,10 +114,13 @@ class User:
         )
         return BugoutUser(**result)
 
-    def restore_password(self, email: str) -> Dict[str, str]:
+    def restore_password(
+        self, email: str, application_id: Optional[Union[str, uuid.UUID]] = None
+    ) -> Dict[str, str]:
         restore_password_path = "password/restore"
         data = {
             "email": email,
+            "application_id": application_id,
         }
         result = self._call(method=Method.post, path=restore_password_path, data=data)
         return result
