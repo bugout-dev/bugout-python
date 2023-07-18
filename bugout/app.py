@@ -108,10 +108,13 @@ class Bugout:
         return self.user.confirm_email(token=token, verification_code=verification_code)
 
     def restore_password(
-        self, email: str, timeout: float = REQUESTS_TIMEOUT
+        self,
+        email: str,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
+        timeout: float = REQUESTS_TIMEOUT,
     ) -> Dict[str, str]:
         self.user.timeout = timeout
-        return self.user.restore_password(email=email)
+        return self.user.restore_password(email=email, application_id=application_id)
 
     def reset_password(
         self,
