@@ -1,9 +1,9 @@
 import uuid
 from datetime import datetime
 from enum import Enum, unique
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Extra, Field, root_validator
 
 
 @unique
@@ -49,6 +49,11 @@ class AuthType(Enum):
 class JournalTypes(Enum):
     DEFAULT = "default"
     HUMBUG = "humbug"
+
+
+class EntryRepresentationTypes(Enum):
+    ENTRY = "entry"
+    ENTITY = "entity"
 
 
 class BugoutUser(BaseModel):
@@ -290,3 +295,46 @@ class BugoutHumbugIntegrationsList(BaseModel):
 
 class BugoutSearchResultWithEntryID(BugoutSearchResult):
     id: str
+
+
+class BugoutJournalEntityRequest(BaseModel, extra=Extra.allow):
+    title: str
+    address: str
+    blockchain: str
+    required_fields: List[Dict[str, Union[str, bool, int, list]]] = Field(
+        default_factory=list
+    )
+
+    extra: Dict[str, Any]
+
+    @root_validator(pre=True)
+    def build_extra(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        all_required_field_names = {
+            field.alias for field in cls.__fields__.values() if field.alias != "extra"
+        }
+
+        extra: Dict[str, Any] = {}
+        for field_name in list(values):
+            if field_name not in all_required_field_names:
+                extra[field_name] = values.pop(field_name)
+        values["extra"] = extra
+        return values
+
+
+class BugoutJournalEntity(BaseModel):
+    id: uuid.UUID
+    journal_id: uuid.UUID
+    journal_url: Optional[str] = None
+    title: Optional[str] = None
+    address: Optional[str] = None
+    blockchain: Optional[str] = None
+    required_fields: Optional[List[Dict[str, Any]]] = None
+    secondary_fields: Optional[Dict[str, Any]] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+
+    locked_by: Optional[str] = None
+
+
+class BugoutJournalEntities(BaseModel):
+    entities: List[BugoutJournalEntity] = Field(default_factory=list)
