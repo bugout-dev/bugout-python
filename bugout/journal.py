@@ -4,27 +4,14 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import (
-    AuthType,
-    BugoutJournal,
-    BugoutJournalEntities,
-    BugoutJournalEntity,
-    BugoutJournalEntityRequest,
-    BugoutJournalEntries,
-    BugoutJournalEntriesRequest,
-    BugoutJournalEntriesTagsRequest,
-    BugoutJournalEntry,
-    BugoutJournalEntryContent,
-    BugoutJournalEntryTags,
-    BugoutJournalPermissions,
-    BugoutJournals,
-    BugoutJournalScopeSpecs,
-    BugoutScopes,
-    BugoutSearchResults,
-    HolderType,
-    JournalTypes,
-    Method,
-)
+from .data import (AuthType, BugoutJournal, BugoutJournalEntities,
+                   BugoutJournalEntity, BugoutJournalEntityRequest,
+                   BugoutJournalEntries, BugoutJournalEntriesRequest,
+                   BugoutJournalEntriesTagsRequest, BugoutJournalEntry,
+                   BugoutJournalEntryContent, BugoutJournalEntryTags,
+                   BugoutJournalPermissions, BugoutJournals,
+                   BugoutJournalScopeSpecs, BugoutScopes, BugoutSearchResults,
+                   HolderType, JournalTypes, Method)
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
@@ -624,7 +611,7 @@ class Journal:
                     "address": entity.address,
                     "blockchain": entity.blockchain,
                     "required_fields": entity.required_fields,
-                    "secondary_fields": entity.extra,
+                    **entity.extra,
                 }
                 for entity in entities
             ]
@@ -701,7 +688,7 @@ class Journal:
         )
         return BugoutJournalEntity(**result)
 
-    def delete_entry(
+    def delete_entity(
         self,
         token: Union[str, uuid.UUID],
         journal_id: Union[str, uuid.UUID],

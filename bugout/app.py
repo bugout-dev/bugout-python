@@ -934,13 +934,11 @@ class Bugout:
         **kwargs: Dict[str, Any],
     ) -> data.BugoutJournalEntities:
         self.journal.timeout = timeout
-        entities_obj = [
-            data.BugoutJournalEntityRequest(**entity) for entity in entities
-        ]
+
         return self.journal.create_entities_pack(
             token=token,
             journal_id=journal_id,
-            entries=entities_obj,
+            entities=[data.BugoutJournalEntityRequest(**entity) for entity in entities],
             auth_type=data.AuthType[auth_type],
             **kwargs,
         )
