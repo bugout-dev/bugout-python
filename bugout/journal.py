@@ -1,18 +1,21 @@
+import json
 import uuid
 from enum import Enum
-import json
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
 from .data import (
     AuthType,
     BugoutJournal,
+    BugoutJournalEntities,
+    BugoutJournalEntity,
+    BugoutJournalEntityRequest,
     BugoutJournalEntries,
     BugoutJournalEntriesRequest,
+    BugoutJournalEntriesTagsRequest,
     BugoutJournalEntry,
     BugoutJournalEntryContent,
     BugoutJournalEntryTags,
-    BugoutJournalEntriesTagsRequest,
     BugoutJournalPermissions,
     BugoutJournals,
     BugoutJournalScopeSpecs,
@@ -570,6 +573,150 @@ class Journal:
         return BugoutJournalEntries(
             entries=[BugoutJournalEntry(**entry) for entry in result]
         )
+
+    # Entity module
+    def create_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        title: str,
+        address: str,
+        blockchain: str,
+        required_fields: List[Dict[str, Union[str, bool, int, list]]] = [],
+        secondary_fields: Dict[str, Any] = {},
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntity:
+        path = f"journals/{journal_id}/entities"
+        json = {
+            "title": title,
+            "address": address,
+            "blockchain": blockchain,
+            "required_fields": required_fields,
+            **secondary_fields,
+        }
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.post, path=path, headers=headers, json=json)
+        return BugoutJournalEntity(**result)
+
+    def create_entities_pack(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entities: List[BugoutJournalEntityRequest],
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntities:
+        path = f"journals/{journal_id}/entities/bulk"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        json = {
+            "entities": [
+                {
+                    "title": entity.title,
+                    "address": entity.address,
+                    "blockchain": entity.blockchain,
+                    "required_fields": entity.required_fields,
+                    **entity.extra,
+                }
+                for entity in entities
+            ]
+        }
+        result = self._call(method=Method.post, path=path, headers=headers, json=json)
+        return BugoutJournalEntities(**result)
+
+    def get_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntity:
+        path = f"journals/{journal_id}/entities/{entity_id}"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.get, path=path, headers=headers)
+        return BugoutJournalEntity(**result)
+
+    def get_entities(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntities:
+        path = f"journals/{journal_id}/entities"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.get, path=path, headers=headers)
+        return BugoutJournalEntities(**result)
+
+    def update_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        title: str,
+        address: str,
+        blockchain: str,
+        required_fields: List[Dict[str, Union[str, bool, int, list]]] = [],
+        secondary_fields: Dict[str, Any] = {},
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntity:
+        path = f"journals/{journal_id}/entities/{entity_id}"
+        params: Dict[str, str] = {}
+        json = {
+            "title": title,
+            "address": address,
+            "blockchain": blockchain,
+            "required_fields": required_fields,
+            **secondary_fields,
+        }
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(
+            method=Method.put,
+            path=path,
+            headers=headers,
+            json=json,
+            params=params,
+        )
+        return BugoutJournalEntity(**result)
+
+    def delete_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        auth_type: AuthType = AuthType.bearer,
+        **kwargs: Dict[str, Any],
+    ) -> BugoutJournalEntity:
+        path = f"journals/{journal_id}/entities/{entity_id}"
+        headers = {
+            "Authorization": f"{auth_type.value} {token}",
+        }
+        if "headers" in kwargs.keys():
+            headers.update(kwargs["headers"])
+        result = self._call(method=Method.delete, path=path, headers=headers)
+        return BugoutJournalEntity(**result)
 
     # Search module
     def search(

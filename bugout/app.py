@@ -897,6 +897,132 @@ class Bugout:
             **kwargs,
         )
 
+    # Entity
+    def create_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        title: str,
+        address: str,
+        blockchain: str,
+        required_fields: List[Dict[str, Union[str, bool, int, list]]] = [],
+        secondary_fields: Dict[str, Any] = {},
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntity:
+        self.journal.timeout = timeout
+        return self.journal.create_entity(
+            token=token,
+            journal_id=journal_id,
+            title=title,
+            address=address,
+            blockchain=blockchain,
+            required_fields=required_fields,
+            secondary_fields=secondary_fields,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def create_entities_pack(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entities: List[Dict[str, Any]],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntities:
+        self.journal.timeout = timeout
+
+        return self.journal.create_entities_pack(
+            token=token,
+            journal_id=journal_id,
+            entities=[data.BugoutJournalEntityRequest(**entity) for entity in entities],
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def get_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntity:
+        self.journal.timeout = timeout
+        return self.journal.get_entity(
+            token=token,
+            journal_id=journal_id,
+            entity_id=entity_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def get_entities(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntities:
+        self.journal.timeout = timeout
+        return self.journal.get_entities(
+            token=token,
+            journal_id=journal_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def update_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        title: str,
+        address: str,
+        blockchain: str,
+        required_fields: List[Dict[str, Union[str, bool, int, list]]] = [],
+        secondary_fields: Dict[str, Any] = {},
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntity:
+        self.journal.timeout = timeout
+        return self.journal.update_entity(
+            token=token,
+            journal_id=journal_id,
+            entity_id=entity_id,
+            title=title,
+            address=address,
+            blockchain=blockchain,
+            required_fields=required_fields,
+            secondary_fields=secondary_fields,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
+    def delete_entity(
+        self,
+        token: Union[str, uuid.UUID],
+        journal_id: Union[str, uuid.UUID],
+        entity_id: Union[str, uuid.UUID],
+        timeout: float = REQUESTS_TIMEOUT,
+        auth_type: str = data.AuthType.bearer.name,
+        **kwargs: Dict[str, Any],
+    ) -> data.BugoutJournalEntity:
+        self.journal.timeout = timeout
+        return self.journal.delete_entity(
+            token=token,
+            journal_id=journal_id,
+            entity_id=entity_id,
+            auth_type=data.AuthType[auth_type],
+            **kwargs,
+        )
+
     # Search
     def search(
         self,

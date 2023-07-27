@@ -1,5 +1,6 @@
 import os
 from importlib.machinery import SourceFileLoader
+
 from setuptools import find_packages, setup
 
 MODULE_NAME = "bugout"
@@ -40,7 +41,7 @@ setup(
     zip_safe=False,
     install_requires=["pydantic<=1.10.2", "requests"],
     extras_require={
-        "dev": ["black", "mypy", "types-requests"],
+        "dev": ["black", "mypy", "isort", "types-requests"],
         "distribute": ["setuptools", "twine", "wheel"],
     },
     entry_points={
