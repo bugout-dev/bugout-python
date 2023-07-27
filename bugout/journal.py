@@ -4,14 +4,27 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Union
 
 from .calls import make_request
-from .data import (AuthType, BugoutJournal, BugoutJournalEntities,
-                   BugoutJournalEntity, BugoutJournalEntityRequest,
-                   BugoutJournalEntries, BugoutJournalEntriesRequest,
-                   BugoutJournalEntriesTagsRequest, BugoutJournalEntry,
-                   BugoutJournalEntryContent, BugoutJournalEntryTags,
-                   BugoutJournalPermissions, BugoutJournals,
-                   BugoutJournalScopeSpecs, BugoutScopes, BugoutSearchResults,
-                   HolderType, JournalTypes, Method)
+from .data import (
+    AuthType,
+    BugoutJournal,
+    BugoutJournalEntities,
+    BugoutJournalEntity,
+    BugoutJournalEntityRequest,
+    BugoutJournalEntries,
+    BugoutJournalEntriesRequest,
+    BugoutJournalEntriesTagsRequest,
+    BugoutJournalEntry,
+    BugoutJournalEntryContent,
+    BugoutJournalEntryTags,
+    BugoutJournalPermissions,
+    BugoutJournals,
+    BugoutJournalScopeSpecs,
+    BugoutScopes,
+    BugoutSearchResults,
+    HolderType,
+    JournalTypes,
+    Method,
+)
 from .exceptions import InvalidUrlSpec
 from .settings import REQUESTS_TIMEOUT
 
