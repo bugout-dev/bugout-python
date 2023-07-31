@@ -1035,6 +1035,9 @@ class Bugout:
         content: bool = True,
         timeout: float = REQUESTS_TIMEOUT,
         order: SearchOrder = SearchOrder.DESCENDING,
+        representation: Union[
+            str, data.EntryRepresentationTypes
+        ] = data.EntryRepresentationTypes.ENTRY,
         auth_type: str = data.AuthType.bearer.name,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutSearchResults:
@@ -1048,6 +1051,7 @@ class Bugout:
             offset,
             content,
             order=order,
+            representation=data.EntryRepresentationTypes(representation),
             auth_type=data.AuthType[auth_type],
             **kwargs,
         )

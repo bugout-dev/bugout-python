@@ -272,14 +272,6 @@ class BugoutSearchResult(BaseModel):
     context_id: Optional[str] = None
 
 
-class BugoutSearchResults(BaseModel):
-    total_results: int
-    offset: int
-    next_offset: Optional[int]
-    max_score: float
-    results: List[BugoutSearchResult]
-
-
 class BugoutHumbugIntegration(BaseModel):
     id: uuid.UUID
     group_id: uuid.UUID
@@ -338,3 +330,26 @@ class BugoutJournalEntity(BaseModel):
 
 class BugoutJournalEntities(BaseModel):
     entities: List[BugoutJournalEntity] = Field(default_factory=list)
+
+
+class BugoutSearchResultAsEntity(BaseModel):
+    journal_id: str
+    entity_url: str
+    title: str
+    address: Optional[str] = None
+    blockchain: Optional[str] = None
+    required_fields: List[Dict[str, Any]] = Field(default_factory=list)
+    secondary_fields: Dict[str, Any] = Field(default_factory=dict)
+    created_at: str
+    updated_at: str
+    score: float
+
+
+class BugoutSearchResults(BaseModel):
+    total_results: int
+    offset: int
+    next_offset: Optional[int]
+    max_score: float
+    results: List[Union[BugoutSearchResult, BugoutSearchResultAsEntity]] = Field(
+        default_factory=list
+    )

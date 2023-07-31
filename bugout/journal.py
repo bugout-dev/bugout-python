@@ -21,6 +21,7 @@ from .data import (
     BugoutJournalScopeSpecs,
     BugoutScopes,
     BugoutSearchResults,
+    EntryRepresentationTypes,
     HolderType,
     JournalTypes,
     Method,
@@ -729,6 +730,7 @@ class Journal:
         offset: int = 0,
         content: bool = True,
         order: SearchOrder = SearchOrder.DESCENDING,
+        representation: EntryRepresentationTypes = EntryRepresentationTypes.ENTRY,
         auth_type: AuthType = AuthType.bearer,
         **kwargs: Dict[str, Any],
     ) -> BugoutSearchResults:
@@ -745,6 +747,7 @@ class Journal:
             "offset": offset,
             "content": content,
             "order": order.value,
+            "representation": representation.value,
         }
         result = self._call(
             method=Method.get, path=search_path, params=query_params, headers=headers
