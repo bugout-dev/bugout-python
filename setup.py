@@ -39,7 +39,7 @@ setup(
     packages=find_packages(),
     package_data={"bugout": ["py.typed"]},
     zip_safe=False,
-    install_requires=["pydantic<=1.10.2", "requests"],
+    install_requires=["pydantic<=1.10.10", "requests"],
     extras_require={
         "dev": ["black", "mypy", "isort", "types-requests"],
         "distribute": ["setuptools", "twine", "wheel"],
