@@ -12,7 +12,7 @@ def make_request(method: Method, url: str, **kwargs) -> Any:
         response.raise_for_status()
     except requests.exceptions.RequestException as err:
         r = err.response
-        if not err.response:
+        if err.response is None:
             # Connection errors, timepouts, etc...
             raise BugoutResponseException(
                 "Network error", status_code=599, detail=str(err)

@@ -8,11 +8,16 @@ from datetime import datetime
 from enum import Enum
 import json
 import os
-import requests
+import requests  # type: ignore
 from typing import Callable, Optional, List
 
 from .app import Bugout
-from .data import AuthType, BugoutSearchResultWithEntryID
+from .data import (
+    AuthType,
+    BugoutSearchResultWithEntryID,
+    BugoutSearchResult,
+    BugoutSearchResult,
+)
 from .journal import SearchOrder
 from .settings import BUGOUT_BROOD_URL, BUGOUT_SPIRE_URL, REQUESTS_TIMEOUT
 
@@ -175,7 +180,10 @@ class BugoutJobQueue:
 
         results = [
             BugoutSearchResultWithEntryID(
-                **dict(raw_result), id=raw_result.entry_url.split("/")[-1]
+                **dict(raw_result),
+                id=raw_result.entry_url.split("/")[-1]
+                if isinstance(raw_result, BugoutSearchResult)
+                else raw_result.entity_url.split("/")[-1],
             )
             for raw_result in job_results.results
         ]
