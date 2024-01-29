@@ -1,3 +1,4 @@
+import json
 import uuid
 from typing import Any, Dict, Optional, Union
 
@@ -129,7 +130,10 @@ class Resource:
             "Authorization": f"Bearer {token}",
         }
         result = self._call(
-            method=Method.post, path=path, headers=headers, json=holder_permissions
+            method=Method.post,
+            path=path,
+            headers=headers,
+            json=json.loads(holder_permissions.json(by_alias=True)),
         )
         return BugoutResourceHolders(**result)
 
@@ -144,6 +148,9 @@ class Resource:
             "Authorization": f"Bearer {token}",
         }
         result = self._call(
-            method=Method.delete, path=path, headers=headers, json=holder_permissions
+            method=Method.delete,
+            path=path,
+            headers=headers,
+            json=json.loads(holder_permissions.json(by_alias=True)),
         )
         return BugoutResourceHolders(**result)
