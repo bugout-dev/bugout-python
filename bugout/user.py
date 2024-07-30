@@ -86,17 +86,33 @@ class User:
 
     def find_user(
         self,
-        username: str,
+        user_id: Optional[Union[str, uuid.UUID]] = None,
+        email: Optional[str] = None,
+        username: Optional[str] = None,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         token: Optional[Union[str, uuid.UUID]] = None,
         **kwargs: Dict[str, Any],
     ) -> BugoutUser:
-        find_user_path = f"user/find?username={username}"
+        find_user_path = f"user/find"
+
+        query_params = {}
+        if user_id is not None:
+            query_params.update({"user_id": str(user_id)})
+        if email is not None:
+            query_params.update({"email": email})
+        if username is not None:
+            query_params.update({"username": username})
+        if application_id is not None:
+            query_params.update({"application_id": str(application_id)})
+
         headers = {}
         if token is not None:
             headers.update({"Authorization": f"Bearer {token}"})
         if "headers" in kwargs.keys():
             headers.update(kwargs["headers"])
-        result = self._call(method=Method.get, path=find_user_path, headers=headers)
+        result = self._call(
+            method=Method.get, path=find_user_path, params=query_params, headers=headers
+        )
         return BugoutUser(**result)
 
     def confirm_email(

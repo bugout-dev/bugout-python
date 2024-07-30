@@ -17,13 +17,13 @@ def make_request(method: Method, url: str, **kwargs) -> Any:
             raise BugoutResponseException(
                 "Network error", status_code=599, detail=str(err)
             )
-        if r.headers.get("Content-Type") == "application/json":
-            exception_detail = r.json()["detail"]
+        if r.headers.get("Content-Type") == "application/json":  # type: ignore
+            exception_detail = r.json()["detail"]  # type: ignore
         else:
-            exception_detail = r.text
+            exception_detail = r.text  # type: ignore
         raise BugoutResponseException(
             "An exception occurred at Bugout API side",
-            status_code=r.status_code,
+            status_code=r.status_code,  # type: ignore
             detail=exception_detail,
         )
     except Exception as e:

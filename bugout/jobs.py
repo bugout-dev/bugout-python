@@ -181,9 +181,11 @@ class BugoutJobQueue:
         results = [
             BugoutSearchResultWithEntryID(
                 **dict(raw_result),
-                id=raw_result.entry_url.split("/")[-1]
-                if isinstance(raw_result, BugoutSearchResult)
-                else raw_result.entity_url.split("/")[-1],
+                id=(
+                    raw_result.entry_url.split("/")[-1]
+                    if isinstance(raw_result, BugoutSearchResult)
+                    else raw_result.entity_url.split("/")[-1]
+                ),
             )
             for raw_result in job_results.results
         ]
