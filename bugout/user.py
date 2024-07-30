@@ -103,7 +103,7 @@ class User:
         if username is not None:
             query_params.update({"username": username})
         if application_id is not None:
-            query_params.update({"application_id": application_id})
+            query_params.update({"application_id": str(application_id)})
 
         headers = {}
         if token is not None:
