@@ -90,13 +90,23 @@ class Bugout:
 
     def find_user(
         self,
-        username: str,
+        user_id: Optional[Union[str, uuid.UUID]] = None,
+        email: Optional[str] = None,
+        username: Optional[str] = None,
+        application_id: Optional[Union[str, uuid.UUID]] = None,
         token: Optional[Union[str, uuid.UUID]] = None,
         timeout: float = REQUESTS_TIMEOUT,
         **kwargs: Dict[str, Any],
     ) -> data.BugoutUser:
         self.user.timeout = timeout
-        return self.user.find_user(username=username, token=token, **kwargs)
+        return self.user.find_user(
+            user_id=user_id,
+            email=email,
+            username=username,
+            application_id=application_id,
+            token=token,
+            **kwargs,
+        )
 
     def confirm_email(
         self,
